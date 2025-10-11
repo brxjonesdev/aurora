@@ -1,0 +1,25 @@
+# Ignore build outputs
+node_modules
+dist
+build
+.next
+out
+/lib/shared/components/ui
+
+# Ignore lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Ignore environment and config files
+.env
+.env.local
+.env.*.local
+
+# Ignore generated files
+*.min.js
+*.min.css
+
+# Ignore project-specific
+public/
+coverage/
