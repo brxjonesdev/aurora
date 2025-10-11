@@ -16,6 +16,7 @@ export default async function Homepage() {
     {
       id: '1',
       title: 'My First Story',
+      slug: 'my-first-story',
       description: 'This is the description of my first story.',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -24,6 +25,7 @@ export default async function Homepage() {
     {
       id: '2',
       title: 'My Second Story',
+      slug: 'my-second-story',
       description: 'This is the description of my second story.',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -42,9 +44,9 @@ export default async function Homepage() {
             <CreateStory />
           </CardAction>
         </CardHeader>
-        <CardContent className="bg-secondary flex flex-1 flex-col rounded-b-lg p-4 gap-4 lg:flex-row ">
+        <CardContent className="bg-secondary flex flex-1 flex-col gap-4 rounded-b-lg p-4 lg:flex-row">
           {userStories.map((story) => (
-           <StoryCard key={story.id} story={story} />
+            <StoryCard key={story.id} story={story} />
           ))}
           {userStories.length === 0 && (
             <section className="flex flex-1 flex-col items-center justify-center">
