@@ -2,9 +2,7 @@ import React from 'react';
 import {
   Card,
   CardAction,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/lib/shared/components/ui/card';

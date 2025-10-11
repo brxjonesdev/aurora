@@ -10,8 +10,19 @@ import React from 'react';
 import CreateStory from '@/lib/aurora/core/stories/create-story';
 import { Story } from '@/lib/aurora/core/stories/types';
 import StoryCard from '@/lib/aurora/core/stories/story-card';
+import { createClient } from '@/lib/supabase/server';
 
 export default async function Homepage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  console.log("Current user:", user)
+  if (!user) {
+    return (
+      <section className="flex w-full flex-1 items-center justify-center px-8 py-4">
+        <h2 className="text-2xl font-semibold">Please log in to view your stories.</h2>
+      </section>
+    )
+  }
   const stories: Story[] = [
     {
       id: '1',
