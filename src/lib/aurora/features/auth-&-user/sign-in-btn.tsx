@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 export default function SignInButton() {
   const router = useRouter();
   const handleSignIn = () => {
-    router.push('/aurora/home');
+    router.push('/aurora/auth?mode=login');
   };
   return (
     <Button

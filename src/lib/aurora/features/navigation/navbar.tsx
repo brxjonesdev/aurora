@@ -1,4 +1,8 @@
 'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import Logo from '@/lib/shared/components/navbar-components/logo';
 import UserMenu from '@/lib/shared/components/navbar-components/user-menu';
 import {
@@ -7,10 +11,10 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from '../../../shared/components/ui/breadcrumb';
+} from '@/lib/shared/components/ui/breadcrumb';
 import StorySwitch from './story-switch';
 import ViewSwitch from './view-switch';
-import { useParams } from 'next/navigation';
+import { set } from 'react-hook-form';
 
 interface StoryMenuItem {
   id: number;
@@ -19,45 +23,64 @@ interface StoryMenuItem {
 }
 
 export default function Navbar() {
+  const [isAuthed, setIsAuthed] = useState(false);
+  const supabase = createClient();
+  const router = useRouter();
+  const params = useParams<{ story: string; id: string; view: string }>();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user){
+        setIsAuthed(false);
+        return;
+      };
+      setIsAuthed(true);
+      router.push('/aurora/home');
+    };
+    checkUser();
+  }, [supabase, router]);
+
   const stories: StoryMenuItem[] = [
     { id: 1, name: 'My First Story', slug: 'my-first-story' },
     { id: 2, name: 'Adventure in Space', slug: 'adventure-in-space' },
     { id: 3, name: 'Mystery of the Lost City', slug: 'mystery-of-the-lost-city' },
   ];
-  const params = useParams<{ story: string; id: string; view: string }>();
-  console.log(params);
+
   return (
     <header className="font-inter w-full px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
-        {/* Left side */}
-        <div className="flex items-center gap-2">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="#" className="text-foreground">
-                  <Logo />
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className=""> / </BreadcrumbSeparator>
-              <BreadcrumbItem className="">
-                <StorySwitch stories={stories} selectedStory={params.id} />
-              </BreadcrumbItem>
-              {params.view && (
-                <>
-                  <BreadcrumbSeparator className=""> / </BreadcrumbSeparator>
-                  <BreadcrumbItem className="">
-                    <ViewSwitch />
-                  </BreadcrumbItem>
-                </>
-              )}
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
+        {/* Left: Breadcrumb navigation */}
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#" className="text-foreground">
+                <Logo />
+              </BreadcrumbLink>
+            </BreadcrumbItem>
 
-        {/* Right side */}
-        <div className="flex items-center gap-4">
-          <UserMenu />
-        </div>
+            {isAuthed && (
+              <>
+                <BreadcrumbSeparator> / </BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <StorySwitch stories={stories} selectedStory={params.id} />
+                </BreadcrumbItem>
+
+                {params.view && (
+                  <>
+                    <BreadcrumbSeparator> / </BreadcrumbSeparator>
+                    <BreadcrumbItem>
+                      <ViewSwitch />
+                    </BreadcrumbItem>
+                  </>
+                )}
+              </>
+            )}
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        {/* Right: User menu */}
+        <UserMenu />
       </div>
     </header>
   );
