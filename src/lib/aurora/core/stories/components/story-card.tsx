@@ -1,7 +1,5 @@
 'use client';
-import React from 'react';
-import { Story } from './types';
-import {
+import{
   Card,
   CardContent,
   CardDescription,
@@ -10,12 +8,13 @@ import {
   CardTitle,
 } from '@/lib/shared/components/ui/card';
 import { useRouter } from 'next/navigation';
+import { Story } from '../types';
 
-export default function StoryCard({ story }: { story: Story }) {
+export default function StoryCard({ story, username }: { story: Story, username: string }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/aurora/${story.slug}/${story.id}/timeline`);
+    router.push(`/aurora/${username}/${story.slug}/timeline`)
   };
 
   return (

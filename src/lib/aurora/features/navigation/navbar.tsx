@@ -14,6 +14,8 @@ import {
 } from '@/lib/shared/components/ui/breadcrumb';
 import StorySwitch from './story-switch';
 import ViewSwitch from './view-switch';
+import { Story } from '../../core/stories/types';
+import { storyService } from '../../core/stories';
 
 interface StoryMenuItem {
   id: number;
@@ -23,10 +25,12 @@ interface StoryMenuItem {
 
 export default function Navbar() {
   const [isAuthed, setIsAuthed] = useState(false);
+  const [stories, setStories] = useState<Story[]>([]);
+  const [userID, setUserID] = useState<string>('');
   const supabase = createClient();
   const pathname = usePathname();
   const router = useRouter();
-  const params = useParams<{ story: string; id: string; view: string }>();
+  const params = useParams<{ user: string, slug: string, view: string }>();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -35,20 +39,25 @@ export default function Navbar() {
         setIsAuthed(false);
         return;
       }
-      if (pathname !== '/aurora/home') {
-        router.push('/aurora/home');
-      }
       setIsAuthed(true);
+      setUserID(data.user.id);
     };
     checkUser();
   }, [supabase, router, pathname]);
 
-  const stories: StoryMenuItem[] = [
-    { id: 1, name: 'My First Story', slug: 'my-first-story' },
-    { id: 2, name: 'Adventure in Space', slug: 'adventure-in-space' },
-    { id: 3, name: 'Mystery of the Lost City', slug: 'mystery-of-the-lost-city' },
-  ];
-
+  useEffect(() => {
+    const fetchStories = async () => {
+      const result = await storyService.getUsersStories(userID);
+      if (!result.ok) {
+        console.error('Error fetching stories:', result.error);
+        return;
+      }
+      setStories(result.data || []);
+    };
+    if (isAuthed) {
+      fetchStories();
+    }
+  }, [isAuthed, supabase, userID]);
   return (
     <header className="font-inter w-full px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -56,7 +65,7 @@ export default function Navbar() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="#" className="text-foreground">
+              <BreadcrumbLink href="/aurora/home" className="text-foreground">
                 <Logo />
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -65,7 +74,7 @@ export default function Navbar() {
               <>
                 <BreadcrumbSeparator> / </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <StorySwitch stories={stories} selectedStory={params.id} />
+                  <StorySwitch stories={stories} selectedStory={params.slug} />
                 </BreadcrumbItem>
 
                 {params.view && (

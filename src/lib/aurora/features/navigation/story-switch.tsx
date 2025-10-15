@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/lib/shared/components/ui/select';
+import { Story } from '../../core/stories/types';
 
 export interface StoryMenuItem {
   id: number;
@@ -17,19 +18,21 @@ export interface StoryMenuItem {
 }
 
 interface StorySwitchProps {
-  stories: StoryMenuItem[];
+  stories: Story[];
   selectedStory: string;
 }
 
 export default function StorySwitch({ stories, selectedStory }: StorySwitchProps) {
   const pathname = usePathname();
   const router = useRouter();
-
+console.log('Pathname:', pathname);
+  console.log('Selected Story:', selectedStory);
+  console.log('Stories:', stories);
   if (pathname === '/aurora/home') {
     return <p>Home</p>;
   }
 
-  const selected = stories.find((story) => story.id.toString() === selectedStory);
+  const selected = stories.find((story) => story.slug.toString() === selectedStory);
 
   // Extract the current subpage (e.g. timeline, overview, etc.)
   const currentSubpage = pathname.split('/').pop() || 'timeline';
@@ -44,12 +47,12 @@ export default function StorySwitch({ stories, selectedStory }: StorySwitchProps
   return (
     <Select defaultValue={selected?.slug} onValueChange={handleChange}>
       <SelectTrigger className="w-fit">
-        <SelectValue placeholder={selected?.name || 'Select story'} />
+        <SelectValue placeholder={selected?.title || 'Select story'} />
       </SelectTrigger>
       <SelectContent>
         {stories.map((story) => (
           <SelectItem key={story.id} value={story.slug}>
-            {story.name}
+            {story.title}
           </SelectItem>
         ))}
       </SelectContent>

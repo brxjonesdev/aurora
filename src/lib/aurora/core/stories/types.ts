@@ -10,6 +10,7 @@ export interface Story {
 
 export interface StoryCreate {
   title: string;
-  description?: string;
+  description: string;
   ownerId: string;
+  slug: string;
 }

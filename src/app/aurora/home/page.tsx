@@ -7,11 +7,10 @@ import {
   CardTitle,
 } from '@/lib/shared/components/ui/card';
 import React from 'react';
-import CreateStory from '@/lib/aurora/core/stories/create-story';
-import StoryCard from '@/lib/aurora/core/stories/story-card';
+import CreateStory from '@/lib/aurora/core/stories/components/create-story';
+import StoryCard from '@/lib/aurora/core/stories/components/story-card';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { storyService } from '@/lib/aurora/core/stories/story-services';
 import {
   Empty,
   EmptyDescription,
@@ -21,8 +20,11 @@ import {
 } from '@/lib/shared/components/ui/empty';
 import { BookIcon } from 'lucide-react';
 import CreateProfile from '@/lib/aurora/features/onboarding/components/create-profile';
+import { Story } from '@/lib/aurora/core/stories/types';
+import { storyService } from '@/lib/aurora/core/stories';
 
 export default async function Homepage() {
+  let username = '';
   const supabase = await createClient();
   const {
     data: { user },
@@ -36,6 +38,7 @@ export default async function Homepage() {
       .select('*')
       .eq('user_id', user.id)
       .maybeSingle();
+    username = profile?.username || '';
     if (profile === null || !profile.onboarded) {
       return (
         <section className="flex w-full flex-1 gap-0 px-8 py-4 justify-center items-center">
@@ -82,12 +85,12 @@ export default async function Homepage() {
           <CardTitle className="text-md font-medium">Your Stories</CardTitle>
           <CardDescription className="text-sm">Create and manage your stories.</CardDescription>
           <CardAction>
-            <CreateStory />
+            <CreateStory userId={user.id} username={username} />
           </CardAction>
         </CardHeader>
         <CardContent className="bg-secondary flex flex-1 flex-col gap-4 rounded-b-lg p-4 lg:flex-row">
-          {userStories.map((story) => (
-            <StoryCard key={story.id} story={story} />
+          {userStories.map((story: Story) => (
+            <StoryCard key={story.id} story={story} username={username} />
           ))}
           {userStories.length === 0 && (
             <section className="flex flex-1 flex-col items-center justify-center">
