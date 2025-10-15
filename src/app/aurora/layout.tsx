@@ -7,7 +7,7 @@ export default function AuroraLayout({ children }: { children: React.ReactNode }
     <main className="flex min-h-screen flex-col items-center justify-center">
       <section className="flex w-full items-center gap-4 border-2 border-r px-4 py-2">
         <Navbar />
-        <LogoutButton/>
+        <LogoutButton />
       </section>
       {children}
     </main>
