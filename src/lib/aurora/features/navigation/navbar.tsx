@@ -14,7 +14,6 @@ import {
 } from '@/lib/shared/components/ui/breadcrumb';
 import StorySwitch from './story-switch';
 import ViewSwitch from './view-switch';
-import { set } from 'react-hook-form';
 
 interface StoryMenuItem {
   id: number;

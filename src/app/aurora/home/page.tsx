@@ -14,7 +14,6 @@ import { redirect } from 'next/navigation';
 import { storyService } from '@/lib/aurora/core/stories/story-services';
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -30,22 +29,22 @@ export default async function Homepage() {
   } = await supabase.auth.getUser();
   if (!user) {
     redirect('/aurora/auth');
+  } else {
+    // User is authenticated, check if they have a profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (profile === null || !profile.onboarded) {
+      return (
+        <section className="flex w-full flex-1 gap-0 px-8 py-4 justify-center items-center">
+          <CreateProfile userId={user.id} initialFullName={user.user_metadata.full_name} />
+        </section>
+      );
+    }
   }
 
-  // // Onboarding redirect
-  // const { data: profile } = await supabase
-  //   .from('profiles')
-  //   .select('*')
-  //   .eq('id', user.id)
-  //   .maybeSingle();
-
-  // if (profile === null || !profile.onboarded) {
-  //   return (
-  //     <section className="flex w-full flex-1 gap-0 px-8 py-4">
-  //       <CreateProfile />
-  //     </section>
-  //   );
-  // }
 
   const result = await storyService.getUsersStories(user.id);
   if (!result.ok) {
