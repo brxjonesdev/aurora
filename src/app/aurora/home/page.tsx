@@ -8,43 +8,73 @@ import {
 } from '@/lib/shared/components/ui/card';
 import React from 'react';
 import CreateStory from '@/lib/aurora/core/stories/create-story';
-import { Story } from '@/lib/aurora/core/stories/types';
 import StoryCard from '@/lib/aurora/core/stories/story-card';
 import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import { storyService } from '@/lib/aurora/core/stories/story-services';
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/lib/shared/components/ui/empty';
+import { BookIcon } from 'lucide-react';
+import CreateProfile from '@/lib/aurora/features/onboarding/components/create-profile';
 
 export default async function Homepage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  console.log("Current user:", user)
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
-    return (
-      <section className="flex w-full flex-1 items-center justify-center px-8 py-4">
-        <h2 className="text-2xl font-semibold">Please log in to view your stories.</h2>
-      </section>
-    )
+    redirect('/aurora/auth');
+  } else {
+    // User is authenticated, check if they have a profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (profile === null || !profile.onboarded) {
+      return (
+        <section className="flex w-full flex-1 gap-0 px-8 py-4 justify-center items-center">
+          <CreateProfile userId={user.id} initialFullName={user.user_metadata.full_name} />
+        </section>
+      );
+    }
   }
-  const stories: Story[] = [
-    {
-      id: '1',
-      title: 'My First Story',
-      slug: 'my-first-story',
-      description: 'This is the description of my first story.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      ownerId: 'user1',
-    },
-    {
-      id: '2',
-      title: 'My Second Story',
-      slug: 'my-second-story',
-      description: 'This is the description of my second story.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      ownerId: 'user1',
-    },
-  ]; // fetch stories from backend
 
-  const userStories = stories; // filter stories by current user
+
+  const result = await storyService.getUsersStories(user.id);
+  if (!result.ok) {
+    return (
+      <section className="flex w-full flex-1 gap-0 px-8 py-4">
+        <Card className="flex-1 gap-0 border-2 bg-transparent p-0">
+          <CardHeader className="gap-0 p-4">
+            <CardTitle className="text-md font-medium">Error</CardTitle>
+            <CardDescription className="text-sm">
+              There was an error loading your stories.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="bg-secondary flex flex-1 flex-col items-center justify-center gap-4 rounded-b-lg p-4 lg:flex-row">
+            <Empty className="w-full max-w-sm border-2">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <BookIcon />
+                </EmptyMedia>
+                <EmptyTitle>Unable to load stories</EmptyTitle>
+                <EmptyDescription>{result.error.message}</EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </CardContent>
+        </Card>
+      </section>
+    );
+  }
+
+  const userStories = result.data;
+
   return (
     <section className="flex w-full flex-1 gap-0 px-8 py-4">
       <Card className="flex-1 gap-0 border-2 bg-transparent p-0">
