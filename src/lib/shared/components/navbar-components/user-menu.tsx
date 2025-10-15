@@ -7,7 +7,6 @@ import {
   UserPenIcon,
 } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/lib/shared/components/ui/avatar';
 import { Button } from '@/lib/shared/components/ui/button';
 import {
   DropdownMenu,
@@ -18,23 +17,63 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/lib/shared/components/ui/dropdown-menu';
+import { createClient } from '@/lib/supabase/client';
+import { Profile } from '@/lib/aurora/core/user/profile.service';
+import { useEffect, useState } from 'react';
+import Avatar from 'boring-avatars';
+import LogoutButton from '@/lib/aurora/features/auth-&-user/logout-btn';
+import { Card } from '../ui/card';
 
 export default function UserMenu() {
+  const supabase = createClient();
+  const [user, setUser] = useState<Profile | null>(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) {
+        setUser(null);
+        return;
+      }
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', data.user.id)
+        .single();
+      if (profileError || !profileData) {
+        setUser(null);
+        return;
+      }
+      setUser(profileData);
+    };
+    fetchUser();
+  }, [supabase]);
+  if (!user) {
+    return null;
+  }
+  console.log('User data:', user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
-          <Avatar>
-            <AvatarImage src="/origin/avatar.jpg" alt="Profile image" />
-            <AvatarFallback>KK</AvatarFallback>
-          </Avatar>
-        </Button>
+        <Card className='p-2 w-fit flex flex-row items-center gap-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors'>
+          <div>
+            <Avatar
+            name={user.avatar_id as string}
+            colors={["#e7ecef", "#274c77", "#6096ba", "#a3cef1", "#8b8c89"]}
+            variant="beam"
+            size={30}
+          />
+          </div>
+          /
+          <div>
+            <span className="text-foreground truncate text-sm font-medium">{user.full_name}</span>
+          </div>
+        </Card>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="max-w-64" align="end">
+      <DropdownMenuContent className="max-w-64" align="center" sideOffset={12}>
         <DropdownMenuLabel className="flex min-w-0 flex-col">
-          <span className="text-foreground truncate text-sm font-medium">Keith Kennedy</span>
+          <span className="text-foreground truncate text-sm font-medium">{user.full_name}</span>
           <span className="text-muted-foreground truncate text-xs font-normal">
-            k.kennedy@coss.com
+            @{user.username}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -65,8 +104,7 @@ export default function UserMenu() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
-          <span>Logout</span>
+          <LogoutButton/>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

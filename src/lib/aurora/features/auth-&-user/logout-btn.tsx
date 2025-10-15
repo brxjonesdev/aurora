@@ -15,5 +15,5 @@ export default function LogoutButton() {
       router.push('/aurora/auth');
     }
   };
-  return <Button onClick={onLogout}>Logout</Button>;
+  return <Button onClick={onLogout} size={"sm"} className='w-full'>Logout</Button>;
 }
