@@ -73,6 +73,7 @@ export interface PlotEventCreate {
     storyId: string;
     title: string;
     description: string;
+    color?: string;
     chapter?: number;
     scene?: number;
     act?: number;
@@ -80,6 +81,7 @@ export interface PlotEventCreate {
     threadIds: string[];
     type: StoryBeatType;
     tensionLevel?: number;
+    visibility?: boolean;
 }
 
 export interface PlotEventUpdate {
@@ -128,6 +130,7 @@ export interface StoryCreate {
 }
 
 export interface StoryUpdate {
+    id: string;
     title?: string;
     description?: string;
     slug?: string;

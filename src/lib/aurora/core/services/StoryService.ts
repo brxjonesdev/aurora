@@ -1,19 +1,13 @@
 
 import { ok, err, Result } from "@/lib/utils";
 import { IStoryRepository } from "../repositories/interfaces/IStoriesRepo";
-import { Story, StoryCreate } from "../types";
+import { Story, StoryCreate, StoryUpdate } from "../types";
 
-export interface StoryService {
-  getUsersStories(userId: string): Promise<Result<Story[], Error>>;
-  createStory(story: StoryCreate): Promise<Result<Story, string>>;
-  getStoryById(storyId: string): Promise<Result<Story | null, Error>>;
-  updateStory(storyId: string, title: string, content: string): Promise<Result<void, Error>>;
-  deleteStory(storyId: string): Promise<Result<void, Error>>;
-}
 
-export function createStoryService(repository: IStoryRepository): StoryService {
+
+export function createStoryService(repository: IStoryRepository){
   return {
-    async getUsersStories(userId) {
+    async getUsersStories(userId: string): Promise<Result<Story[], Error>> {
       const result = await repository.getStoriesByUser(userId);
       if (!result.ok) return err(new Error(result.error));
       return ok(result.data);
@@ -34,22 +28,22 @@ export function createStoryService(repository: IStoryRepository): StoryService {
       return ok(result.data);
     },
 
-    async getStoryById(storyId) {
+    async getStoryById(storyId: string) {
       const result = await repository.getStoryById(storyId);
       if (!result.ok) return err(new Error(result.error));
       return ok(result.data);
     },
 
-    async updateStory(storyId, title, content) {
-      if (!title.trim()) return err(new Error("Title cannot be empty"));
-      if (!content.trim()) return err(new Error("Content cannot be empty"));
+    async updateStory(data: StoryUpdate) {
+      if (!data || !data.title || !data.title.trim()) return err(new Error("Title cannot be empty"));
+      if (!data || !data.description || !data.description.trim()) return err(new Error("Description cannot be empty"));
 
-      const result = await repository.update(storyId, title, content);
+      const result = await repository.update(data.id, data.title, data.description);
       if (!result.ok) return err(new Error(result.error));
       return ok(undefined);
     },
 
-    async deleteStory(storyId) {
+    async deleteStory(storyId: string) {
       const result = await repository.delete(storyId);
       if (!result.ok) return err(new Error(result.error));
       return ok(undefined);

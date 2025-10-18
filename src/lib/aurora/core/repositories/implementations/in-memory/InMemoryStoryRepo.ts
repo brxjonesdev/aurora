@@ -3,7 +3,7 @@ import { ok } from "@/lib/utils";
 import { DEFAULT_STORY_SETTINGS, Story, StoryCreate } from "../../../types";
 import { IStoryRepository } from "../../interfaces/IStoriesRepo";
 
-export function createInMemoryRepository(): IStoryRepository {
+export function createInMemoryStoryRepository(): IStoryRepository {
   let stories: Story[] = [];
 
   return {
