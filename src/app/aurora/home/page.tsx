@@ -89,9 +89,11 @@ export default async function Homepage() {
           </CardAction>
         </CardHeader>
         <CardContent className="bg-secondary flex flex-1 flex-col gap-4 rounded-b-lg p-4 lg:flex-row">
+          <div className='flex-1 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 auto-rows-[150px]'>
           {userStories.map((story: Story) => (
             <StoryCard key={story.id} story={story} username={username} />
           ))}
+          </div>
           {userStories.length === 0 && (
             <section className="flex flex-1 flex-col items-center justify-center">
               <h2>You have no stories yet.</h2>

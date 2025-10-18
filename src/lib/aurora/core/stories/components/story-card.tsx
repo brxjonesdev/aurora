@@ -18,17 +18,11 @@ export default function StoryCard({ story, username }: { story: Story, username:
   };
 
   return (
-    <Card className="max-h-72 w-full md:max-w-72" onClick={handleClick}>
+    <Card className="w-full h-full" onClick={handleClick}>
       <CardHeader>
         <CardTitle>{story.title}</CardTitle>
         <CardDescription>{story.description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
     </Card>
   );
 }

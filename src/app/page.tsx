@@ -1,5 +1,4 @@
 import WelcomeCard from '@/lib/aurora/features/onboarding/components/welcome-card';
-import Image from 'next/image';
 
 export default function Home() {
   return (

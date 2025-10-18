@@ -12,7 +12,7 @@ export default function LogoutButton() {
     if (error) {
       console.error('Logout error:', error);
     } else {
-      router.push('/aurora/auth');
+      router.push('/');
     }
   };
   return <Button onClick={onLogout} size={"sm"} className='w-full'>Logout</Button>;
