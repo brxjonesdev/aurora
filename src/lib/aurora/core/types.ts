@@ -1,49 +1,55 @@
-// types for plot threads, events, and connections
-export type ThreadType = 
+// ========== THREAD TYPES ==========
+
+export type ThreadType =
     | 'main'
-    | "subplot"
-    | "character arc"
-    | "worldbuilding"
-    | "romance"
-    | "mystery"
+    | 'subplot'
+    | 'character-arc'
+    | 'worldbuilding'
+    | 'romance'
+    | 'mystery'
 
 export interface PlotThread {
     id: string;
     storyId: string;
     title: string;
-    color: string; // Hex color code for thread visualization
+    color: string;
     description: string;
     type: ThreadType;
-    createdAt: Date;
-    updatedAt: Date;
+    order: number;
+    isVisible: boolean;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface PlotThreadCreate {
     storyId: string;
     title: string;
-    description: string;
-    color: string; // Hex color code for thread visualization
+    description?: string;
+    color?: string;
     type: ThreadType;
 }
 
 export interface PlotThreadUpdate {
     title?: string;
     description?: string;
-    color?: string; // Hex color code for thread visualization
+    color?: string;
     type?: ThreadType;
+    order?: number;
+    isVisible?: boolean;
 }
 
-// types for plot events / story beats
+// ========== EVENT TYPES ==========
+
 export type StoryBeatType =
     | 'setup'
-    | 'rising action'
+    | 'rising-action'
     | 'climax'
-    | 'falling action'
+    | 'falling-action'
     | 'resolution'
-    | 'plot twist'
+    | 'plot-twist'
     | 'flashback'
     | 'foreshadowing'
-    | 'character development'
+    | 'character-development'
     | 'reveal'
 
 export interface PlotEvent {
@@ -54,11 +60,13 @@ export interface PlotEvent {
     chapter?: number;
     scene?: number;
     act?: number;
-    customTime?: string; // For custom time units
-    threadIds: string[]; // IDs of associated plot threads
+    customTime?: string;
+    position: number; // Order within same time unit
+    threadIds: string[];
     type: StoryBeatType;
-    createdAt: Date;
-    updatedAt: Date;
+    tensionLevel?: number; // 1-10 for analytics
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface PlotEventCreate {
@@ -68,63 +76,85 @@ export interface PlotEventCreate {
     chapter?: number;
     scene?: number;
     act?: number;
-    customTime?: string; // For custom time units
-    threadIds: string[]; // IDs of associated plot threads
+    customTime?: string;
+    threadIds: string[];
     type: StoryBeatType;
+    tensionLevel?: number;
 }
+
 export interface PlotEventUpdate {
     title?: string;
     description?: string;
     chapter?: number;
     scene?: number;
     act?: number;
-    customTime?: string; // For custom time units
-    threadIds?: string[]; // IDs of associated plot threads
+    customTime?: string;
+    position?: number;
+    threadIds?: string[];
     type?: StoryBeatType;
+    tensionLevel?: number;
 }
 
-// types for story and story settings
+// ========== STORY TYPES ==========
 
 export interface StorySettings {
     timeUnit: 'chapter' | 'scene' | 'act' | 'custom';
     customTimeUnit?: string;
     defaultView: 'timeline' | 'plot' | 'threads';
-
-    
 }
- 
+
 export interface Story {
-  id: string;
-  title: string;
-  description: string;
-  slug: string;
-  createdAt: Date;
-  updatedAt: Date;
-  ownerId: string;
+    id: string;
+    title: string;
+    description: string;
+    slug: string;
+    settings: StorySettings;
+    createdAt: string;
+    updatedAt: string;
+    ownerId: string;
 }
 
 export interface StoryCreate {
-  title: string;
-  description: string;
-  ownerId: string;
-  slug: string;
+    title: string;
+    description: string;
+    slug: string;
+    ownerId: string;
+    settings?: Partial<StorySettings>;
 }
 
 export interface StoryUpdate {
     title?: string;
     description?: string;
     slug?: string;
+    settings?: Partial<StorySettings>;
 }
 
+// ========== CONNECTION TYPES ==========
 
-// types for connections between plot events and plot threads
 export type ConnectionType =
     | 'cause-effect'
     | 'setup-payoff'
-    | "conflict-resolution"
-    | "echoes"
-    | "symbolism"
-    | "prerequisite"
+    | 'conflict-resolution'
+    | 'echoes'
+    | 'symbolism'
+    | 'prerequisite'
 
+export interface EventThreadConnection {
+    id: string;
+    storyId: string;
+    fromEventId: string;
+    toThreadId: string;
+    type: ConnectionType;
+    createdAt: string;
+    updatedAt: string;
+}
 
-
+export interface EventEventConnection {
+    id: string;
+    storyId: string;
+    fromEventId: string;
+    toEventId: string;
+    type: ConnectionType;
+    createdAt: string;
+    updatedAt: string;
+}
