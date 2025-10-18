@@ -114,6 +114,11 @@ export interface Story {
     ownerId: string;
 }
 
+export const DEFAULT_STORY_SETTINGS: StorySettings = {
+    timeUnit: 'chapter',
+    defaultView: 'timeline',
+}
+
 export interface StoryCreate {
     title: string;
     description: string;

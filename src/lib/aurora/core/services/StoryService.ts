@@ -1,6 +1,7 @@
-import { StoryRepository } from "./story-repo";
-import { Story, StoryCreate } from "./types";
+
 import { ok, err, Result } from "@/lib/utils";
+import { IStoryRepository } from "../repositories/interfaces/IStoriesRepo";
+import { Story, StoryCreate } from "../types";
 
 export interface StoryService {
   getUsersStories(userId: string): Promise<Result<Story[], Error>>;
@@ -10,7 +11,7 @@ export interface StoryService {
   deleteStory(storyId: string): Promise<Result<void, Error>>;
 }
 
-export function createStoryService(repository: StoryRepository): StoryService {
+export function createStoryService(repository: IStoryRepository): StoryService {
   return {
     async getUsersStories(userId) {
       const result = await repository.getStoriesByUser(userId);
