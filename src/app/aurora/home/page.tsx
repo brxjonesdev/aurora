@@ -7,8 +7,8 @@ import {
   CardTitle,
 } from '@/lib/shared/components/ui/card';
 import React from 'react';
-import CreateStory from '@/lib/aurora/core/stories/components/create-story';
-import StoryCard from '@/lib/aurora/core/stories/components/story-card';
+import CreateStory from '@/lib/aurora/core/stories/create-story';
+import StoryCard from '@/lib/aurora/core/stories/story-card';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import {

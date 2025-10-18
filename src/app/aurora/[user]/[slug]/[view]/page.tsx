@@ -3,9 +3,9 @@ import { notFound } from "next/navigation"
 import dynamic from "next/dynamic"
 
 // Lazy-load large views for performance
-const PlotsView = dynamic(() => import("@/lib/aurora/core/stories/views/plot/plots"))
-const TimelineView = dynamic(() => import("@/lib/aurora/core/stories/views/timeline/timeline"))
-const ThreadsView = dynamic(() => import("@/lib/aurora/core/stories/views/threads/threads"))
+const PlotsView = dynamic(() => import("@/lib/aurora/core/views/plot/plots"))
+const TimelineView = dynamic(() => import("@/lib/aurora/core/views/timeline/timeline"))
+const ThreadsView = dynamic(() => import("@/lib/aurora/core/views/threads/threads"))
 
 export default async function Page({
   params,

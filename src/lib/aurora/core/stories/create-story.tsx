@@ -15,7 +15,7 @@ import { Input } from "@/lib/shared/components/ui/input"
 import { Label } from "@/lib/shared/components/ui/label"
 import { Textarea } from "@/lib/shared/components/ui/textarea"
 import { Spinner } from "@/lib/shared/components/ui/spinner"
-import { storyService } from ".."
+import { useServices } from "../hooks/useServices"
 import { useRouter } from "next/navigation"
 
 interface CreateStoryDialogProps {
@@ -25,6 +25,7 @@ interface CreateStoryDialogProps {
 
 export default function CreateStory({ userId, username }: CreateStoryDialogProps) {
   console.log("CreateStory rendered with userId:", userId, "and username:", username)
+  const { storyService } = useServices()
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
