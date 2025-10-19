@@ -7,8 +7,8 @@ import {
   CardTitle,
 } from '@/lib/shared/components/ui/card';
 import React from 'react';
-import CreateStory from '@/lib/aurora/core/stories/create-story';
-import StoryCard from '@/lib/aurora/core/stories/story-card';
+import CreateStory from '@/app/aurora/home/_components/create-story';
+import StoryCard from '@/app/aurora/home/_components/story-card';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import {
@@ -20,10 +20,11 @@ import {
 } from '@/lib/shared/components/ui/empty';
 import { BookIcon } from 'lucide-react';
 import CreateProfile from '@/lib/aurora/features/onboarding/components/create-profile';
-import { Story } from '@/lib/aurora/core/stories/types';
-import { storyService } from '@/lib/aurora/core/stories';
-
+import { Story } from '@/lib/aurora/core/types';
+import { createServices } from '@/lib/aurora/core/createServices';
+import Stories from './_components/stories';
 export default async function Homepage() {
+  const { storyService } = createServices();
   let username = '';
   const supabase = await createClient();
   const {
@@ -41,13 +42,12 @@ export default async function Homepage() {
     username = profile?.username || '';
     if (profile === null || !profile.onboarded) {
       return (
-        <section className="flex w-full flex-1 gap-0 px-8 py-4 justify-center items-center">
+        <section className="flex w-full flex-1 items-center justify-center gap-0 px-8 py-4">
           <CreateProfile userId={user.id} initialFullName={user.user_metadata.full_name} />
         </section>
       );
     }
   }
-
 
   const result = await storyService.getUsersStories(user.id);
   if (!result.ok) {
@@ -89,11 +89,7 @@ export default async function Homepage() {
           </CardAction>
         </CardHeader>
         <CardContent className="bg-secondary flex flex-1 flex-col gap-4 rounded-b-lg p-4 lg:flex-row">
-          <div className='flex-1 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 auto-rows-[150px]'>
-          {userStories.map((story: Story) => (
-            <StoryCard key={story.id} story={story} username={username} />
-          ))}
-          </div>
+          <Stories initialStories={userStories} username={username} />
           {userStories.length === 0 && (
             <section className="flex flex-1 flex-col items-center justify-center">
               <h2>You have no stories yet.</h2>

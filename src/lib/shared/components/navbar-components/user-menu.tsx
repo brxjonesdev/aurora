@@ -1,6 +1,12 @@
-"use client"
+'use client';
 
-import { BoltIcon, BookOpenIcon, Layers2Icon, PinIcon, UserPlusIcon as UserPenIcon } from "lucide-react"
+import {
+  BoltIcon,
+  BookOpenIcon,
+  Layers2Icon,
+  PinIcon,
+  UserPlusIcon as UserPenIcon,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,49 +15,49 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/lib/shared/components/ui/dropdown-menu"
-import { createClient } from "@/lib/supabase/client"
-import type { Profile } from "@/lib/aurora/core/user/profile.service"
-import { useEffect, useState } from "react"
-import Avatar from "boring-avatars"
-import LogoutButton from "@/lib/aurora/features/auth-&-user/logout-btn"
-import { Card } from "../ui/card"
+} from '@/lib/shared/components/ui/dropdown-menu';
+import { createClient } from '@/lib/supabase/client';
+import type { Profile } from '@/lib/aurora/features/auth-&-user/profile.service';
+import { useEffect, useState } from 'react';
+import Avatar from 'boring-avatars';
+import LogoutButton from '@/lib/aurora/features/auth-&-user/logout-btn';
+import { Card } from '../ui/card';
 
 export default function UserMenu() {
-  const supabase = createClient()
-  const [user, setUser] = useState<Profile | null>(null)
+  const supabase = createClient();
+  const [user, setUser] = useState<Profile | null>(null);
   useEffect(() => {
     const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser()
+      const { data, error } = await supabase.auth.getUser();
       if (error || !data.user) {
-        setUser(null)
-        return
+        setUser(null);
+        return;
       }
       const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", data.user.id)
-        .single()
+        .from('profiles')
+        .select('*')
+        .eq('user_id', data.user.id)
+        .single();
       if (profileError || !profileData) {
-        setUser(null)
-        return
+        setUser(null);
+        return;
       }
-      setUser(profileData)
-    }
-    fetchUser()
-  }, [supabase])
+      setUser(profileData);
+    };
+    fetchUser();
+  }, [supabase]);
   if (!user) {
-    return null
+    return null;
   }
-  console.log("User data:", user)
+  console.log('User data:', user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Card className="p-2 min-h-[44px] w-fit flex flex-row items-center gap-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors">
+        <Card className="hover:bg-accent hover:text-accent-foreground flex min-h-[44px] w-fit cursor-pointer flex-row items-center gap-2 p-2 transition-colors">
           <div>
             <Avatar
               name={user.avatar_id as string}
-              colors={["#e7ecef", "#274c77", "#6096ba", "#a3cef1", "#8b8c89"]}
+              colors={['#e7ecef', '#274c77', '#6096ba', '#a3cef1', '#8b8c89']}
               variant="beam"
               size={30}
             />
@@ -62,10 +68,16 @@ export default function UserMenu() {
           </div>
         </Card>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[calc(100vw-2rem)] max-w-64 md:w-64" align="end" sideOffset={12}>
+      <DropdownMenuContent
+        className="w-[calc(100vw-2rem)] max-w-64 md:w-64"
+        align="end"
+        sideOffset={12}
+      >
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">{user.full_name}</span>
-          <span className="text-muted-foreground truncate text-xs font-normal">@{user.username}</span>
+          <span className="text-muted-foreground truncate text-xs font-normal">
+            @{user.username}
+          </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -99,5 +111,5 @@ export default function UserMenu() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

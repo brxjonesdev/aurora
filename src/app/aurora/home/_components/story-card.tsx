@@ -1,5 +1,5 @@
 'use client';
-import{
+import {
   Card,
   CardContent,
   CardDescription,
@@ -8,17 +8,17 @@ import{
   CardTitle,
 } from '@/lib/shared/components/ui/card';
 import { useRouter } from 'next/navigation';
-import { Story } from '../types';
+import { Story } from '../../../../lib/aurora/core/types';
 
-export default function StoryCard({ story, username }: { story: Story, username: string }) {
+export default function StoryCard({ story, username }: { story: Story; username: string }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/aurora/${username}/${story.slug}/timeline`)
+    router.push(`/aurora/${username}/${story.slug}/timeline`);
   };
 
   return (
-    <Card className="w-full h-full" onClick={handleClick}>
+    <Card className="h-full w-full" onClick={handleClick}>
       <CardHeader>
         <CardTitle>{story.title}</CardTitle>
         <CardDescription>{story.description}</CardDescription>

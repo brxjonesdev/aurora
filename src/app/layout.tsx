@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/lib/shared/components/ui/theme-provider';
+import { AppStoreProvider } from '@/lib/aurora/core/stores/AppStoreProvider';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-inter antialiased`}>
+        <AppStoreProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -30,6 +32,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        </AppStoreProvider>
       </body>
     </html>
   );

@@ -13,7 +13,7 @@ import {
 } from '@/lib/shared/components/ui/card';
 import Avatar from 'boring-avatars';
 import { nanoid } from 'nanoid';
-import { profileService } from '@/lib/aurora/core/user';
+import { profileService } from '@/lib/aurora/features/auth-&-user';
 import { useRouter } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 

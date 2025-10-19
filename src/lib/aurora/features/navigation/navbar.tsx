@@ -14,8 +14,9 @@ import {
 } from "@/lib/shared/components/ui/breadcrumb"
 import StorySwitch from "./story-switch"
 import ViewSwitch from "./view-switch"
-import type { Story } from "../../core/stories/types"
-import { storyService } from "../../core/stories"
+import { Story } from "../../core/types"
+import { useServices } from "../../core/useServices"
+
 
 interface StoryMenuItem {
   id: number
@@ -24,6 +25,7 @@ interface StoryMenuItem {
 }
 
 export default function Navbar() {
+  const { storyService } = useServices()
   const [isAuthed, setIsAuthed] = useState(false)
   const [stories, setStories] = useState<Story[]>([])
   const [userID, setUserID] = useState<string>("")

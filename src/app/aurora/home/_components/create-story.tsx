@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/lib/shared/components/ui/button"
+import { useState } from 'react';
+import { Button } from '@/lib/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,59 +10,61 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/lib/shared/components/ui/dialog"
-import { Input } from "@/lib/shared/components/ui/input"
-import { Label } from "@/lib/shared/components/ui/label"
-import { Textarea } from "@/lib/shared/components/ui/textarea"
-import { Spinner } from "@/lib/shared/components/ui/spinner"
-import { useServices } from "../hooks/useServices"
-import { useRouter } from "next/navigation"
+} from '@/lib/shared/components/ui/dialog';
+import { Input } from '@/lib/shared/components/ui/input';
+import { Label } from '@/lib/shared/components/ui/label';
+import { Textarea } from '@/lib/shared/components/ui/textarea';
+import { Spinner } from '@/lib/shared/components/ui/spinner';
+import { useServices } from '@/lib/aurora/core/useServices';
+import { useRouter } from 'next/navigation';
 
 interface CreateStoryDialogProps {
-  userId: string
-   username: string
+  userId: string;
+  username: string;
 }
 
 export default function CreateStory({ userId, username }: CreateStoryDialogProps) {
-  console.log("CreateStory rendered with userId:", userId, "and username:", username)
-  const { storyService } = useServices()
-  const router = useRouter()
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  console.log('CreateStory rendered with userId:', userId, 'and username:', username);
+  const { storyService } = useServices();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (isSubmitting) return
-    setIsSubmitting(true)
-    setError(null)
+    e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError(null);
     const result = await storyService.createStory({
-      title, description, ownerId: userId,
-      slug: title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
-    })
+      title,
+      description,
+      ownerId: userId,
+      slug: title
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, ''),
+    });
     if (!result.ok) {
-      setError(result.error)
-      setIsSubmitting(false)
+      setError(result.error);
+      setIsSubmitting(false);
     } else {
-      setIsSubmitting(false)
-      setError(null)
-      router.push(`/aurora/${username}/${result.data.slug}/timeline`)
+      setIsSubmitting(false);
+      setError(null);
+      router.push(`/aurora/${username}/${result.data.slug}/timeline`);
     }
-    
-
-
-  }
+  };
 
   const handleOpenChange = (newOpen: boolean) => {
-    if (isSubmitting) return
-    setOpen(newOpen)
+    if (isSubmitting) return;
+    setOpen(newOpen);
     if (!newOpen) {
-      setTitle("")
-      setDescription("")
+      setTitle('');
+      setDescription('');
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -70,7 +72,7 @@ export default function CreateStory({ userId, username }: CreateStoryDialogProps
         <Button
           variant="outline"
           size="sm"
-          className="mt-2 cursor-pointer tracking-wide transition-all duration-300 ease-in-out hover:bg-blue-100 hover:text-blue-900 bg-transparent"
+          className="mt-2 cursor-pointer bg-transparent tracking-wide transition-all duration-300 ease-in-out hover:bg-blue-100 hover:text-blue-900"
         >
           Create New Story
         </Button>
@@ -81,8 +83,9 @@ export default function CreateStory({ userId, username }: CreateStoryDialogProps
           <DialogHeader>
             <DialogTitle>Create New Story</DialogTitle>
             <DialogDescription>
-              Start your creative journey.<br/>Give your story a title and description to begin.
-              
+              Start your creative journey.
+              <br />
+              Give your story a title and description to begin.
             </DialogDescription>
           </DialogHeader>
 
@@ -100,7 +103,7 @@ export default function CreateStory({ userId, username }: CreateStoryDialogProps
                 maxLength={100}
                 autoFocus
               />
-              <p className="text-xs text-muted-foreground">{title.length}/100 characters</p>
+              <p className="text-muted-foreground text-xs">{title.length}/100 characters</p>
             </div>
 
             <div className="grid gap-2">
@@ -117,12 +120,10 @@ export default function CreateStory({ userId, username }: CreateStoryDialogProps
                 maxLength={500}
                 className="resize-none"
               />
-              <p className="text-xs text-muted-foreground">{description.length}/500 characters</p>
+              <p className="text-muted-foreground text-xs">{description.length}/500 characters</p>
             </div>
           </div>
-          <div>
-            {error && <p className="text-sm text-blue-300">{error}</p>}
-          </div>
+          <div>{error && <p className="text-sm text-blue-300">{error}</p>}</div>
 
           <DialogFooter>
             <Button
@@ -140,12 +141,12 @@ export default function CreateStory({ userId, username }: CreateStoryDialogProps
                   Creating...
                 </>
               ) : (
-                "Create Story"
+                'Create Story'
               )}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

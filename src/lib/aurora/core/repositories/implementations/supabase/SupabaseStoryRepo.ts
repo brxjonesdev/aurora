@@ -3,7 +3,7 @@ import { StoryCreate, Story } from "../../../types";
 import { IStoryRepository } from "../../interfaces/IStoriesRepo";
 import { createClient } from "@/lib/supabase/client";
 
-export function createSupabaseRepository(): IStoryRepository {
+export function createSupabaseStoryRepository(): IStoryRepository {
   const supabase = createClient();
   return {
   create: async function (story: StoryCreate): Promise<Result<Story, string>> {
