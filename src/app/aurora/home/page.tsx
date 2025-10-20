@@ -8,7 +8,6 @@ import {
 } from '@/lib/shared/components/ui/card';
 import React from 'react';
 import CreateStory from '@/app/aurora/home/_components/create-story';
-import StoryCard from '@/app/aurora/home/_components/story-card';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import {
@@ -20,9 +19,11 @@ import {
 } from '@/lib/shared/components/ui/empty';
 import { BookIcon } from 'lucide-react';
 import CreateProfile from '@/lib/aurora/features/onboarding/components/create-profile';
-import { Story } from '@/lib/aurora/core/types';
 import { createServices } from '@/lib/aurora/core/createServices';
 import Stories from './_components/stories';
+
+
+
 export default async function Homepage() {
   const { storyService } = createServices();
   let username = '';

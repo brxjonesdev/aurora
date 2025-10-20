@@ -1,16 +1,17 @@
 import {createStore} from "zustand/vanilla";
-import { PlotEvent } from "../types";
+
+import { Event } from "../types/event";
 
 export type EventState = {
-    events: PlotEvent[];
+    events: Event[];
     loading: boolean;
 }
 
 export type EventActions = {
-    setEvents: (events: PlotEvent[]) => void;
-    addEvent: (event: PlotEvent) => void;
-    removeEvent: (eventId: PlotEvent["id"]) => void;
-    updateEvent: (eventId: PlotEvent["id"], updatedEvent: Partial<PlotEvent>) => void;
+    setEvents: (events: Event[]) => void;
+    addEvent: (event: Event) => void;
+    removeEvent: (eventId: Event["id"]) => void;
+    updateEvent: (eventId: Event["id"], updatedEvent: Partial<Event>) => void;
 }
 
 export type EventStore = EventState & EventActions;

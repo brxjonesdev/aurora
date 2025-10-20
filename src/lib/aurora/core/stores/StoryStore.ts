@@ -1,5 +1,6 @@
 import {createStore} from "zustand/vanilla";
-import { Story } from "../types";
+import { Story } from "../types/story";
+
 
 export type StoryState = {
     stories: Story[];

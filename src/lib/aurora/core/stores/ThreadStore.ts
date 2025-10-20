@@ -1,16 +1,17 @@
 import {createStore} from "zustand/vanilla";
-import { PlotThread } from "../types";
+import { Thread } from "../types/thread";
+
 
 export type ThreadState = {
-    threads: PlotThread[];
+    threads: Thread[];
     loading: boolean;
 }
 
 export type ThreadActions = {
-    setThreads: (threads: PlotThread[]) => void;
-    addThread: (thread: PlotThread) => void;
-    removeThread: (threadId: PlotThread["id"]) => void;
-    updateThread: (threadId: PlotThread["id"], updatedThread: Partial<PlotThread>) => void;
+    setThreads: (threads: Thread[]) => void;
+    addThread: (thread: Thread) => void;
+    removeThread: (threadId: Thread["id"]) => void;
+    updateThread: (threadId: Thread["id"], updatedThread: Partial<Thread>) => void;
 }
 
 export type ThreadStore = ThreadState & ThreadActions;
@@ -28,7 +29,7 @@ export const defaultInitState: ThreadState = {
 }
 
 export const createThreadStore = (
-    initState: ThreadState = defaultInitState) => createStore<ThreadStore>((set, get) => ({
+    initState: ThreadState = defaultInitState) => createStore<ThreadStore>((set) => ({
         ...initState,
         setThreads: (threads) => set({threads}),
         addThread: (thread) => set((state) => ({threads: [...state.threads, thread]})),

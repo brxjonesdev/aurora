@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createStore } from "zustand/vanilla";
-import { Story, PlotThread, PlotEvent } from "../types";
+import { Story } from "../types/story";
+import { Thread } from "../types/thread";
+import { Event } from "../types/event";
+
 
 // Story Slice
 export type StorySlice = {
@@ -13,20 +16,20 @@ export type StorySlice = {
 
 // Thread Slice
 export type ThreadSlice = {
-  threads: PlotThread[];
-  setThreads: (threads: PlotThread[]) => void;
-  addThread: (thread: PlotThread) => void;
-  removeThread: (threadId: PlotThread["id"]) => void;
-  updateThread: (threadId: PlotThread["id"], updatedThread: Partial<PlotThread>) => void;
+  threads: Thread[];
+  setThreads: (threads: Thread[]) => void;
+  addThread: (thread: Thread) => void;
+  removeThread: (threadId: Thread["id"]) => void;
+  updateThread: (threadId: Thread["id"], updatedThread: Partial<Thread>) => void;
 };
 
 // Event Slice
 export type EventSlice = {
-  events: PlotEvent[];
-  setEvents: (events: PlotEvent[]) => void;
-  addEvent: (event: PlotEvent) => void;
-  removeEvent: (eventId: PlotEvent["id"]) => void;
-  updateEvent: (eventId: PlotEvent["id"], updatedEvent: Partial<PlotEvent>) => void;
+  events: Event[];
+  setEvents: (events: Event[]) => void;
+  addEvent: (event: Event) => void;
+  removeEvent: (eventId: Event["id"]) => void;
+  updateEvent: (eventId: Event["id"], updatedEvent: Partial<Event>) => void;
 };
 
 // Combined Store Type
