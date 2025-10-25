@@ -1,7 +1,7 @@
 
 import { ok, err, Result } from "@/lib/utils";
 import { IStoryRepository } from "../repositories/interfaces/IStoriesRepo";
-import { Story, StoryCreate, StoryUpdate } from "../types";
+import { Story, StoryCreate, StoryUpdate } from "../types/story";
 
 
 
