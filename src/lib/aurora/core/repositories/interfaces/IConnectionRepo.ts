@@ -1,6 +1,6 @@
 // lib/repositories/interfaces/IConnectionRepository.ts
 
-import { EventThreadConnection, EventEventConnection } from "../../types";
+import { EventThreadConnection, EventEventConnection } from "@/lib/aurora/core/types/connection";
 
 export interface IConnectionRepository {
   // Event-Thread Connections

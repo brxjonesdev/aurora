@@ -1,7 +1,8 @@
 import { Result, err, ok } from "@/lib/utils";
-import { StoryCreate, Story } from "../../../types";
+
 import { IStoryRepository } from "../../interfaces/IStoriesRepo";
 import { createClient } from "@/lib/supabase/client";
+import { Story, StoryCreate } from "../../../types/story";
 
 export function createSupabaseStoryRepository(): IStoryRepository {
   const supabase = createClient();

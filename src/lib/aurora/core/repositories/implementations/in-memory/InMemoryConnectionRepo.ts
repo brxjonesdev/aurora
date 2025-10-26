@@ -1,4 +1,4 @@
-import { EventThreadConnection, EventEventConnection } from "../../../types";
+import { EventThreadConnection, EventEventConnection } from "@/lib/aurora/core/types/connection";
 import { IConnectionRepository } from "../../interfaces/IConnectionRepo";
 
 export function createInMemoryConnectionRepository(): IConnectionRepository {

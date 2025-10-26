@@ -43,3 +43,8 @@ export interface ThreadUpdate {
     order?: number;
     isVisible?: boolean;
 }
+
+export type MoveThreadRef = {
+  refThreadId: string;
+  position: "before" | "after";
+};

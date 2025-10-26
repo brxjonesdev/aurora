@@ -1,7 +1,8 @@
 import { err } from "@/lib/utils";
 import { ok } from "@/lib/utils";
-import { DEFAULT_STORY_SETTINGS, Story, StoryCreate } from "../../../types";
+
 import { IStoryRepository } from "../../interfaces/IStoriesRepo";
+import { Story, StoryCreate, DEFAULT_STORY_SETTINGS } from "../../../types/story";
 
 export function createInMemoryStoryRepository(): IStoryRepository {
   let stories: Story[] = [];

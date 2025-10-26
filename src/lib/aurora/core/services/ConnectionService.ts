@@ -4,7 +4,7 @@ import {
   ConnectionType,
   EventThreadConnection,
   EventEventConnection,
-} from "../types";
+} from "@/lib/aurora/core/types/connection";
 
 export interface IConnectionService {
   createEventToThreadConnection(data: {

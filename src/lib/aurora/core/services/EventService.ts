@@ -1,59 +1,60 @@
 import { Result, err, ok } from "@/lib/utils";
-import { PlotEventCreate, PlotEvent, StoryBeatType } from "../types";
+import { EventCreate, Event, EventType, MoveEventRef} from "@/lib/aurora/core/types/event";
 import { IEventsRepository } from "../repositories/interfaces/IEventsRepo";
 
 export interface IEventService {
-  createNewEvent(data: PlotEventCreate): Promise<Result<PlotEvent, string>>;
+  createNewEvent(data: EventCreate): Promise<Result<Event, string>>;
   deleteEvent(eventId: string): Promise<Result<boolean, string>>;
-  getStoryEvents(storyId: string): Promise<Result<PlotEvent[], string>>;
-  getEventById(eventId: string): Promise<Result<PlotEvent | null, string>>;
-  bulkUpdateEvents(updates: { id: string; data: PlotEventCreate }[]): Promise<Result<boolean, string>>;
-  changeOrder(updates: { id: string; data: PlotEventCreate }[]): Promise<Result<boolean, string>>;
-  changeType(eventId: string, type: StoryBeatType): Promise<Result<boolean, string>>;
+  getStoryEvents(storyId: string): Promise<Result<Event[], string>>;
+  getEventById(eventId: string): Promise<Result<Event | null, string>>;
+  bulkUpdateEvents(updates: { id: string; data: EventCreate }[]): Promise<Result<boolean, string>>;
+  changeEventOrder(eventID: string, ref: MoveEventRef): Promise<Result<boolean, string>>;
+  changeType(eventId: string, type: EventType): Promise<Result<boolean, string>>;
   changeTensionLevel(eventId: string, tensionLevel: number): Promise<Result<boolean, string>>;
-  getEventsByChapter(storyId: string, chapter: number): Promise<Result<PlotEvent[], string>>;
-  getEventsByAct(storyId: string, act: number): Promise<Result<PlotEvent[], string>>;
-  getEventsByScene(storyId: string, scene: number): Promise<Result<PlotEvent[], string>>;
-  getThreadEvents(threadId: string): Promise<Result<PlotEvent[], string>>;
+  getEventsByChapter(storyId: string, chapter: number): Promise<Result<Event[], string>>;
+  getEventsByAct(storyId: string, act: number): Promise<Result<Event[], string>>;
+  getEventsByScene(storyId: string, scene: number): Promise<Result<Event[], string>>;
+  getThreadEvents(threadId: string): Promise<Result<Event[], string>>;
 }
 
 export function createEventService(repository: IEventsRepository): IEventService {
   return {
-    async createNewEvent(data) {
+    async createNewEvent(data: EventCreate): Promise<Result<Event, string>> {
       return err("Not implemented");
     },
-    async deleteEvent(eventId) {
+    async deleteEvent(eventId: string): Promise<Result<boolean, string>> {
       return err("Not implemented");
     },
-    async getStoryEvents(storyId) {
+    async getStoryEvents(storyId: string): Promise<Result<Event[], string>> {
       return err("Not implemented");
     },
-    async getEventById(eventId) {
+    async getEventById(eventId: string): Promise<Result<Event | null, string>> {
       return err("Not implemented");
     },
-    async bulkUpdateEvents(updates) {
+    async bulkUpdateEvents(updates: { id: string; data: EventCreate }[]): Promise<Result<boolean, string>> {
       return err("Not implemented");
     },
-    async changeOrder(updates) {
+    async changeEventOrder(eventID: string, ref: MoveEventRef): Promise<Result<boolean, string>> {
       return err("Not implemented");
     },
-    async changeType(eventId, type) {
+    async changeType(eventId: string, type: EventType): Promise<Result<boolean, string>> {
       return err("Not implemented");
     },
-    async changeTensionLevel(eventId, tensionLevel) {
+    async changeTensionLevel(eventId: string, tensionLevel: number): Promise<Result<boolean, string>> {
       return err("Not implemented");
     },
-    async getEventsByChapter(storyId, chapter) {
+    async getEventsByChapter(storyId: string, chapter: number): Promise<Result<Event[], string>> {
       return err("Not implemented");
     },
-    async getEventsByAct(storyId, act) {
+    async getEventsByAct(storyId: string, act: number): Promise<Result<Event[], string>> {
       return err("Not implemented");
     },
-    async getEventsByScene(storyId, scene) {
+    async getEventsByScene(storyId: string, scene: number): Promise<Result<Event[], string>> {
       return err("Not implemented");
     },
-    async getThreadEvents(threadId) {
+    async getThreadEvents(threadId: string): Promise<Result<Event[], string>> {
       return err("Not implemented");
     },
   };
 }
+

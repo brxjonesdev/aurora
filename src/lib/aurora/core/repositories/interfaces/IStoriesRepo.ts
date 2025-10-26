@@ -1,5 +1,6 @@
 import { Result } from "@/lib/utils";
-import { StoryCreate, Story } from "../../types";
+import { Story, StoryCreate } from "../../types/story";
+
 
 export interface IStoryRepository {
   create(story: StoryCreate): Promise<Result<Story, string>>;

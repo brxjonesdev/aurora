@@ -1,13 +1,14 @@
 import { IEventsRepository } from "../../interfaces/IEventsRepo";
 import { err, ok, Result } from "@/lib/utils";
-import { PlotEvent, PlotEventCreate, PlotEventUpdate } from "../../../types";
+import { Event, EventCreate, EventUpdate } from "../../../types/event";
+
 
 export function createInMemoryEventRepository(): IEventsRepository {
-  let events: PlotEvent[] = [];
+  let events: Event[] = [];
 
   return {
-    async create(event: PlotEventCreate): Promise<Result<PlotEvent, string>> {
-      const newEvent: PlotEvent = {
+    async create(event: EventCreate): Promise<Result< Event, string>> {
+      const newEvent:  Event = {
         id: String(events.length + 1),
         ...event,
         position: events.filter((e) => e.storyId === event.storyId).length,
@@ -18,17 +19,17 @@ export function createInMemoryEventRepository(): IEventsRepository {
       return ok(newEvent);
     },
 
-    async getEventsByStory(storyId: string): Promise<Result<PlotEvent[], string>> {
+    async getEventsByStory(storyId: string): Promise<Result< Event[], string>> {
       const storyEvents = events.filter((e) => e.storyId === storyId);
       return ok(storyEvents);
     },
 
-    async getEventById(eventId: string): Promise<Result<PlotEvent | null, string>> {
+    async getEventById(eventId: string): Promise<Result< Event | null, string>> {
       const event = events.find((e) => e.id === eventId) ?? null;
       return ok(event);
     },
 
-    async update(eventId: string, data: PlotEventUpdate): Promise<Result<void, string>> {
+    async update(eventId: string, data:  EventUpdate): Promise<Result<void, string>> {
       const index = events.findIndex((e) => e.id === eventId);
       if (index === -1) return err("Event not found");
 
@@ -50,7 +51,7 @@ export function createInMemoryEventRepository(): IEventsRepository {
     },
 
     async bulkUpdate(
-      updates: { id: string; data: PlotEventUpdate }[]
+      updates: { id: string; data:  EventUpdate }[]
     ): Promise<Result<void, string>> {
       for (const update of updates) {
         const index = events.findIndex((e) => e.id === update.id);

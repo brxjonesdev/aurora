@@ -62,3 +62,8 @@ export interface EventUpdate {
     type?: EventType;
     tensionLevel?: number;
 }
+
+export type MoveEventRef = {
+  refEventId: string;
+  position: "before" | "after";
+};

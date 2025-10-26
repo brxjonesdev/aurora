@@ -1,11 +1,11 @@
 import { Result } from "@/lib/utils";
-import { PlotThreadCreate, PlotThread, PlotThreadUpdate } from "../../types";
+import { ThreadCreate, Thread, ThreadUpdate } from "@/lib/aurora/core/types/thread";
 
 export interface IThreadsRepository {
-  create(thread: PlotThreadCreate): Promise<Result<PlotThread, string>>;
-  getThreadsByStory(storyId: string): Promise<Result<PlotThread[], string>>;
-  getThreadById(threadId: string): Promise<Result<PlotThread | null, string>>;
-  update(threadId: string, data: PlotThreadUpdate): Promise<Result<boolean, string>>;
+  create(thread: ThreadCreate): Promise<Result<Thread, string>>;
+  getThreadsByStory(storyId: string): Promise<Result<Thread[], string>>;
+  getThreadById(threadId: string): Promise<Result<Thread | null, string>>;
+  update(threadId: string, data: ThreadUpdate): Promise<Result<boolean, string>>;
   delete(threadId: string): Promise<Result<boolean, string>>;
-  bulkUpdate(updates: { id: string; data: PlotThreadUpdate }[]): Promise<Result<boolean, string>>;
+  bulkUpdate(updates: { id: string; data: ThreadUpdate }[]): Promise<Result<boolean, string>>;
 }
