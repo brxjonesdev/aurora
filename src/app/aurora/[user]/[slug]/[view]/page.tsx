@@ -1,12 +1,34 @@
-import React from 'react'
+import React from "react"
+import { notFound } from "next/navigation"
+import dynamic from "next/dynamic"
 
-export default async function page({ params }: { params: Promise<{ user: string; slug: string }> }) {
-  const { user, slug } = await params
-  return (
-    <section className="flex w-full flex-1 gap-0 px-8 py-4 justify-center items-center">
-      <h1>
-        User: {user}, Story: {slug}
-      </h1>
-    </section>
-  )
+// Lazy-load large views for performance
+const TimelineView = dynamic(() => import("@/lib/aurora/core/views/timeline/timeline"))
+// const SwimlaneView = dynamic(() => import("@/lib/aurora/core/views/swimlane/swimlane"))
+// const BoardView = dynamic(() => import("@/lib/aurora/core/views/board/board"))
+// const GraphView = dynamic(() => import("@/lib/aurora/core/views/graph/graph"))
+// const AnalyticsView = dynamic(() => import("@/lib/aurora/core/views/analytics/analytics"))
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ user: string; slug: string; view: string }>
+}) {
+  const { user, slug, view } = await params
+
+  // promise all for data fetching if needed in the future
+
+  const viewMap: Record<string, React.ReactNode> = {
+    timeline: <TimelineView user={user} slug={slug} />,
+    swimlane: <div>Swimlane View - Coming Soon</div>, // <SwimlaneView username={user} storySlug={slug} />
+    board: <div>Board View - Coming Soon</div>, // <BoardView username={user} storySlug={slug} />
+    graph: <div>Graph View - Coming Soon</div>, // <GraphView username={user} storySlug={slug} />
+    analytics: <div>Analytics View - Coming Soon</div>, // <AnalyticsView username={user} storySlug={slug} />
+  }
+
+  const selectedView = viewMap[view]
+
+  if (!selectedView) return notFound()
+
+  return selectedView
 }

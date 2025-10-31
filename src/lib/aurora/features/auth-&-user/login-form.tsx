@@ -25,12 +25,12 @@ export function LoginForm({ onChange }: { onChange: (mode: 'login' | 'register')
   const router = useRouter();
 
   async function login(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) {
-      console.error('Login error:', error);
+      setIsLoading(false);
     } else {
       router.push('/aurora/home');
     }

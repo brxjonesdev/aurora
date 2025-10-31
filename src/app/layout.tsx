@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/lib/shared/components/ui/theme-provider';
+import { SidebarProvider } from '@/lib/shared/components/ui/sidebar';
+import { PlotweaverStoreProvider } from '@/lib/aurora/core/stores/plotweaver-store-provider';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -22,14 +24,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-inter antialiased`}>
+        <PlotweaverStoreProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          <SidebarProvider>
           {children}
+          </SidebarProvider>
         </ThemeProvider>
+        </PlotweaverStoreProvider>
       </body>
     </html>
   );
