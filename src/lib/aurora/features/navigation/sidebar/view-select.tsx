@@ -4,6 +4,7 @@ import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel } from '@/lib/shar
 import { ChartBarStackedIcon, ChartGanttIcon, ChartNoAxesCombinedIcon, SquareKanbanIcon } from 'lucide-react'
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 
 export const VIS_MODES = [
   { name: "Timeline", slug: "timeline", icon: <ChartGanttIcon /> },
@@ -14,6 +15,7 @@ export const VIS_MODES = [
 
 export default function ViewSelect() {
   const router = useRouter()
+  const { view } = useParams<{ slug: string; user: string; view: string }>()
 
   const handleClick = (modeSlug: string) => {
     router.push(`${modeSlug}`)
@@ -30,7 +32,7 @@ export default function ViewSelect() {
       onClick={() => handleClick(mode.slug)}
       key={mode.slug} 
       size="lg" 
-      className="w-full  text-md cursor-pointer">
+      className={`cursor-pointer gap-2 w-full text-xs md:text-sm ${view === mode.slug ? 'bg-blue-300 text-cyan-800 hover:bg-blue-400' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}>
       {mode.icon}
       {mode.name}
       </Button>

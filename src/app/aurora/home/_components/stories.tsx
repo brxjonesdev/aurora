@@ -2,8 +2,8 @@
 
 import React, { useEffect } from 'react';
 import StoryCard from './story-card';
-import { useAppStore } from '@/lib/aurora/core/stores/AppStoreProvider';
 import { Story } from '@/lib/aurora/core/types/story';
+import { usePlotweaverStore } from '@/lib/aurora/core/stores/plotweaver-store-provider';
 
 export default function Stories({ 
   initialStories, 
@@ -13,9 +13,9 @@ export default function Stories({
   username: string 
 }) {
   // Get stories from store
-  const stories = useAppStore((state) => state.stories);
-  const setStories = useAppStore((state) => state.setStories);
-  
+  const stories = usePlotweaverStore((state) => state.stories);
+  const setStories = usePlotweaverStore((state) => state.setStories);
+
   // Sync initial data with store on mount
   useEffect(() => {
     if (initialStories.length > 0) {

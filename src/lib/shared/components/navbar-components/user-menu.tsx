@@ -53,7 +53,7 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Card className="hover:bg-accent hover:text-accent-foreground flex min-h-[44px] w-fit cursor-pointer flex-row items-center gap-2 p-2 transition-colors">
+        <Card className="hover:bg-accent hover:text-accent-foreground flex min-h-[44px] cursor-pointer flex-row items-center gap-2 p-2 transition-colors w-full">
           <div>
             <Avatar
               name={user.avatar_id as string}
@@ -70,7 +70,8 @@ export default function UserMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-[calc(100vw-2rem)] max-w-64 md:w-64"
-        align="end"
+        align="start"
+        side='right'
         sideOffset={12}
       >
         <DropdownMenuLabel className="flex min-w-0 flex-col">

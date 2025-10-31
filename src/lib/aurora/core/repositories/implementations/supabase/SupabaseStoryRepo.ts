@@ -25,6 +25,17 @@ export function createSupabaseStoryRepository(): IStoryRepository {
     if (error) return err(error.message);
     return ok(data as Story[]);
   },
+  getStoryBySlug: async function (userId: string, slug: string): Promise<Result<Story | null, string>> {
+    const { data, error } = await supabase
+      .from('stories')
+      .select('*')
+      .eq('owner_id', userId)
+      .eq('slug', slug)
+      .single();
+    if (error) return err(error.message);
+    console.log("SupabaseStoryRepo - getStoryBySlug data:", data, " for userId:", userId, " and slug:", slug);
+    return ok(data as Story | null);
+  },
   getStoryById: function (storyId: string): Promise<Result<Story | null, string>> {
     throw new Error("Function not implemented.");
   },

@@ -2,6 +2,7 @@
 import { ok, err, Result } from "@/lib/utils";
 import { IStoryRepository } from "../repositories/interfaces/IStoriesRepo";
 import { Story, StoryCreate, StoryUpdate } from "../types/story";
+import { get } from "http";
 
 
 
@@ -48,5 +49,17 @@ export function createStoryService(repository: IStoryRepository){
       if (!result.ok) return err(new Error(result.error));
       return ok(undefined);
     },
+
+    async getStoryBySlug(userId: string, slug: string) {
+      if (!slug || !slug.trim()) return err("Slug cannot be empty");
+      if (!userId || !userId.trim()) return err("User ID cannot be empty");
+
+      const result = await repository.getStoryBySlug(userId, slug);
+      if (!result.ok ) {
+        return err(result.error);
+      }
+      return ok(result.data);
+    }
   };
 }
+

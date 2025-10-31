@@ -8,4 +8,5 @@ export interface IStoryRepository {
   getStoryById(storyId: string): Promise<Result<Story | null, string>>;
   update(storyId: string, title: string, content: string): Promise<Result<void, string>>;
   delete(storyId: string): Promise<Result<void, string>>;
+  getStoryBySlug(userId: string, slug: string): Promise<Result<Story | null, string>>;
 }

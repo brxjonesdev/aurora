@@ -1,10 +1,10 @@
 "use client";
-import { SidebarHeader, SidebarContent, SidebarGroup, SidebarFooter, Sidebar } from "@/lib/shared/components/ui/sidebar";
+import { SidebarContent, SidebarFooter, Sidebar } from "@/lib/shared/components/ui/sidebar";
 import { useParams } from 'next/navigation'
 import Header from "./header";
-import { View } from "lucide-react";
 import ViewSelect from "./view-select";
 import ThreadSelect from "./thread-select";
+import UserMenu from "@/lib/shared/components/navbar-components/user-menu";
 
 export function AppSidebar() {
   const params = useParams<{
@@ -18,12 +18,14 @@ export function AppSidebar() {
   }
   return (
     <Sidebar className="w-64" >
-     <Header/>
+     <Header user={params.user} slug={params.slug}/>
       <SidebarContent>
         <ViewSelect/>
         <ThreadSelect/>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <UserMenu />
+      </SidebarFooter>
     </Sidebar>
   )
 }

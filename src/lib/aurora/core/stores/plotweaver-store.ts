@@ -1,8 +1,10 @@
 import { createStore } from 'zustand/vanilla'
 import { StoryEvent } from '../types/events'
+import { Story } from '../types/story'
 
 export type PlotweaverState = {
     events: StoryEvent[]
+    stories: Story[]
 }
 
 export type PlotweaverActions = {
@@ -10,12 +12,18 @@ export type PlotweaverActions = {
     addEvent: (event: StoryEvent) => void
     updateEvent: (updatedEvent: StoryEvent) => void
     removeEvent: (eventId: string) => void
+
+    setStories: (stories: Story[]) => void
+    addStory: (story: Story) => void
+    updateStory: (updatedStory: Story) => void
+    removeStory: (storyId: string) => void
 }
 
 export type PlotweaverStore = PlotweaverState & PlotweaverActions
 
 export const defaultInitState: PlotweaverState = {
     events: [],
+    stories: [],
 }
 
 export const createPlotweaverStore = (
@@ -31,6 +39,17 @@ export const createPlotweaverStore = (
             })),
             removeEvent: (eventId: string) => set((state) => ({
                 events: state.events.filter((event) => event.id !== eventId),
+            })),
+
+            setStories: (stories: Story[]) => set(() => ({ stories })),
+            addStory: (story: Story) => set((state) => ({ stories: [...state.stories, story] })),
+            updateStory: (updatedStory: Story) => set((state) => ({
+                stories: state.stories.map((story) =>
+                    story.id === updatedStory.id ? updatedStory : story
+                ),
+            })),
+            removeStory: (storyId: string) => set((state) => ({
+                stories: state.stories.filter((story) => story.id !== storyId),
             })),
         }))
     }
