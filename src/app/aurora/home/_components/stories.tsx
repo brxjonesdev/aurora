@@ -1,9 +1,9 @@
 "use client";
 
-import { Story } from '@/lib/aurora/core/types';
 import React, { useEffect } from 'react';
 import StoryCard from './story-card';
 import { useAppStore } from '@/lib/aurora/core/stores/AppStoreProvider';
+import { Story } from '@/lib/aurora/core/types/story';
 
 export default function Stories({ 
   initialStories, 

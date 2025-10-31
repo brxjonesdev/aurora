@@ -12,17 +12,11 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/lib/shared/components/ui/breadcrumb"
-import StorySwitch from "./story-switch"
-import ViewSwitch from "./view-switch"
-import { Story } from "../../core/types"
-import { useServices } from "../../core/useServices"
+import { useServices } from "@/lib/aurora/core/useServices"
+import { Story } from "@/lib/aurora/core/types/story"
+import { SidebarTrigger } from "@/lib/shared/components/ui/sidebar"
 
 
-interface StoryMenuItem {
-  id: number
-  name: string
-  slug: string
-}
 
 export default function Navbar() {
   const { storyService } = useServices()
@@ -61,8 +55,15 @@ export default function Navbar() {
     }
   }, [isAuthed, supabase, userID])
   return (
-    <header className="font-inter w-full px-3 md:px-6">
-      <div className="flex h-16 items-center justify-between gap-2 md:gap-4">
+    <header className="font-inter w-full flex items-center justify-around gap-4 ">
+      {
+        pathname !== "/aurora/home" && params.slug && (
+          <>
+            <SidebarTrigger className="" />
+          </>
+        )
+      }
+      <div className="flex h-16 items-center justify-between gap-2 md:gap-4 flex-1">
         {/* Left: Breadcrumb navigation */}
         <Breadcrumb className="text-xs md:text-sm flex-1 min-w-0">
           <BreadcrumbList className="flex-wrap gap-1 md:gap-2">
@@ -71,24 +72,6 @@ export default function Navbar() {
                 <Logo />
               </BreadcrumbLink>
             </BreadcrumbItem>
-
-            {isAuthed && (
-              <>
-                <BreadcrumbSeparator className="hidden sm:block"> / </BreadcrumbSeparator>
-                <BreadcrumbItem className="min-w-0">
-                  <StorySwitch stories={stories} selectedStory={params.slug} />
-                </BreadcrumbItem>
-
-                {params.view && (
-                  <>
-                    <BreadcrumbSeparator className="hidden sm:block"> / </BreadcrumbSeparator>
-                    <BreadcrumbItem className="min-w-0">
-                      <ViewSwitch />
-                    </BreadcrumbItem>
-                  </>
-                )}
-              </>
-            )}
           </BreadcrumbList>
         </Breadcrumb>
 

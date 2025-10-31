@@ -1,19 +1,46 @@
 // lib/repositories/interfaces/IConnectionRepository.ts
-
-import { EventThreadConnection, EventEventConnection } from "@/lib/aurora/core/types/connection";
+import {
+  EventThreadConnection,
+  EventEventConnection,
+  EventDependencyConnection,
+  ConnectionType,
+} from "@/lib/aurora/core/types/connection";
+import { Result } from "@/lib/utils";
 
 export interface IConnectionRepository {
-  // Event-Thread Connections
-  getEventThreadById(id: string): Promise<EventThreadConnection | null>;
-  getEventThreadByStoryId(storyId: string): Promise<EventThreadConnection[]>;
-  getEventThreadByEventId(eventId: string): Promise<EventThreadConnection[]>;
-  createEventThread(connection: EventThreadConnection): Promise<void>;
-  deleteEventThread(id: string): Promise<void>;
-  
-  // Event-Event Connections
-  getEventEventById(id: string): Promise<EventEventConnection | null>;
-  getEventEventByStoryId(storyId: string): Promise<EventEventConnection[]>;
-  getEventEventByEventId(eventId: string): Promise<EventEventConnection[]>;
-  createEventEvent(connection: EventEventConnection): Promise<void>;
-  deleteEventEvent(id: string): Promise<void>;
+  // Create connections
+  createEventToThreadConnection(
+    eventID: string,
+    threadID: string,
+    type: ConnectionType
+  ): Promise<Result<EventThreadConnection, string>>;
+
+  createEventToEventConnection(
+    eventID: string,
+    toEventID: string,
+    type: ConnectionType
+  ): Promise<Result<EventEventConnection, string>>;
+  // Remove connections
+  removeEventToThreadConnection(
+    connectionID: string
+  ): Promise<Result<boolean, string>>;
+
+  removeEventToEventConnection(
+    connectionID: string
+  ): Promise<Result<boolean, string>>;
+
+  // Optional: query connections if needed
+  getConnectionsByEvent(
+    eventID: string
+  ): Promise<Result<
+    (EventThreadConnection | EventEventConnection | EventDependencyConnection)[],
+    string
+  >>;
+
+  getConnectionsByStory(
+    storyID: string
+  ): Promise<Result<
+    (EventThreadConnection | EventEventConnection | EventDependencyConnection)[],
+    string
+  >>;
 }
