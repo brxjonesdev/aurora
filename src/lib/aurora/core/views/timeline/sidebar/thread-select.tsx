@@ -1,12 +1,16 @@
-"use client"
+'use client';
 
-import { Empty, EmptyTitle } from '@/lib/shared/components/ui/empty'
-import { SidebarGroup, SidebarGroupLabel, SidebarGroupAction, SidebarGroupContent } from '@/lib/shared/components/ui/sidebar'
-import { Plus } from 'lucide-react'
-import React from 'react'
+import { Empty, EmptyTitle } from '@/lib/shared/components/ui/empty';
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupAction,
+  SidebarGroupContent,
+} from '@/lib/shared/components/ui/sidebar';
+import { Plus } from 'lucide-react';
+import React from 'react';
 
 export default function ThreadSelect() {
-  
   // const newThread: Thread = {
   //   id: `thread-${Date.now()}`,
   //   storyId: 'story-1',
@@ -22,15 +26,15 @@ export default function ThreadSelect() {
   //  const handleAddThread = () => {
   //   setThreads([...threads, newThread])
   //  }
-  
+
   return (
     <SidebarGroup>
-          <SidebarGroupLabel>Plot Threads</SidebarGroupLabel>
-          <SidebarGroupAction>
-            <Plus /> <span className="sr-only">Add Project</span>
-          </SidebarGroupAction>
-          <SidebarGroupContent>
-            {/* {threads.length === 0 ? (
+      <SidebarGroupLabel>Plot Threads</SidebarGroupLabel>
+      <SidebarGroupAction>
+        <Plus /> <span className="sr-only">Add Project</span>
+      </SidebarGroupAction>
+      <SidebarGroupContent>
+        {/* {threads.length === 0 ? (
                 <Empty>
                     <EmptyTitle>No threads yet</EmptyTitle>
                 </Empty>
@@ -42,7 +46,7 @@ export default function ThreadSelect() {
                     </div>
                 ))
             )} */}
-          </SidebarGroupContent>
+      </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }

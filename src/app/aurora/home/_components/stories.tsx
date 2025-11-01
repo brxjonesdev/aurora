@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
 import React, { useEffect } from 'react';
 import StoryCard from './story-card';
 import { Story } from '@/lib/aurora/core/types/story';
 import { usePlotweaverStore } from '@/lib/aurora/core/stores/plotweaver-store-provider';
 
-export default function Stories({ 
-  initialStories, 
-  username 
-}: { 
-  initialStories: Story[], 
-  username: string 
+export default function Stories({
+  initialStories,
+  username,
+}: {
+  initialStories: Story[];
+  username: string;
 }) {
   // Get stories from store
   const stories = usePlotweaverStore((state) => state.stories);
@@ -22,10 +22,10 @@ export default function Stories({
       setStories(initialStories);
     }
   }, [initialStories, setStories]);
-  
+
   // Use store data for rendering (falls back to initialStories during hydration)
   const displayStories = stories.length > 0 ? stories : initialStories;
-  
+
   return (
     <div className="grid flex-1 auto-rows-[150px] grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
       {displayStories.map((story: Story) => (

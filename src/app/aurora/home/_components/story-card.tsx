@@ -1,20 +1,13 @@
 'use client';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/lib/shared/components/ui/card';
+import { Story } from '@/lib/aurora/core/types/story';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/lib/shared/components/ui/card';
 import { useRouter } from 'next/navigation';
-import { Story } from '../../../../lib/aurora/core/types';
 
 export default function StoryCard({ story, username }: { story: Story; username: string }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/aurora/${username}/${story.slug}/timeline`);
+    router.push(`/aurora/plotweaver/${username}/${story.slug}/timeline`);
   };
 
   return (
