@@ -281,19 +281,7 @@ export default function StoryOrganizer() {
     return folders
   }
 
-const handleSelection = (item: Folder | File) => {
-    setSelectedId(item.id)
-    // Expected pathname format: /aurora/manuscript/[user]/[slug]
-    const pathSegments = pathname.split("/").filter(Boolean)
-    const userIndex = pathSegments.indexOf("manuscript")
 
-    if (userIndex !== -1 && userIndex + 2 < pathSegments.length) {
-      const user = pathSegments[userIndex + 1]
-      const slug = pathSegments[userIndex + 2]
-      const newPath = `/aurora/manuscript/${user}/${slug}/${item.slug}?view=cards`
-      router.push(newPath)
-    }
-  }
 
 
   return (
@@ -323,7 +311,6 @@ const handleSelection = (item: Folder | File) => {
               key={item.id}
               item={item}
               selectedId={selectedId}
-              onClick={() => handleSelection(item)}
               itemPath={[index]}
               onUpdate={updateItem}
               onDelete={deleteItem}

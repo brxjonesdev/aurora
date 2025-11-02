@@ -17,7 +17,6 @@ export default function Tree({
   onDuplicate,
   onMove,
   allFolders,
-  onClick,
   selectedId,
 }: {
   item: TreeItem
@@ -29,7 +28,6 @@ export default function Tree({
   onDuplicate?: (item: Folder | File, path: number[]) => void
   onMove?: (sourcePath: number[], destinationFolderId: string) => void
   allFolders?: Array<{ id: string; name: string }>
-  onClick?: (item: TreeItem) => void
   selectedId?: string | null
 }) {
 
@@ -54,10 +52,6 @@ export default function Tree({
         >
           <SidebarMenuButton
             className="text-xs data-[active=true]:bg-transparent"
-            onClick={(e) => {
-              e.stopPropagation() // prevent bubbling up to parent folder
-              onClick?.(item)
-            }}
           >
             <FileIcon className="size-4" />
             {item.name}
@@ -93,10 +87,6 @@ export default function Tree({
               className={`text-xs ${
                 selectedId === item.id ? "bg-accent/50" : "hover:bg-accent/20"
               }`}
-              onClick={(e) => {
-                e.stopPropagation() // prevent triggering parent's click
-                onClick?.(item)
-              }}
             >
               <ChevronRight className="transition-transform size-4" />
               <FolderIcon className="size-4" />
@@ -118,7 +108,6 @@ export default function Tree({
                   onAddFolder={onAddFolder}
                   onDuplicate={onDuplicate}
                   allFolders={allFolders}
-                  onClick={onClick}
                   selectedId={selectedId}
                 />
               ))}

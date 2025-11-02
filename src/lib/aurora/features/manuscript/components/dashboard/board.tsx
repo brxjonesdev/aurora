@@ -39,45 +39,11 @@ const fakeData: Manuscript = {
 }
 
 export default function Cards({ fileSlug }: { fileSlug?: string }) {
-  // Find a folder by slug and return its child files, or the item itself if it's a file
-  const findContentBySlug = (items: (Folder | File)[], slug?: string): (Folder | File)[] => {
-    if (!slug) return items
-
-    for (const item of items) {
-      if (item.slug === slug) {
-        if (item.type === "folder") {
-          // Return the folder's children if it's a folder
-          return item.children ?? []
-        } else {
-          // Return the single file if it's a file
-          return [item]
-        }
-      } else if (item.type === "folder" && item.children) {
-        const found = findContentBySlug(item.children, slug)
-        if (found.length > 0) return found
-      }
-    }
-
-    return []
-  }
-
-  const filteredContent = findContentBySlug(fakeData.content, fileSlug)
-  console.log("Filtered Content:", filteredContent)
-
-  const sampleCardData: SynopsisCardProps[] = filteredContent.map((item) => ({
-    id: item.id,
-    title: item.name,
-    synopsis: item.hoverSynopsis || "No synopsis available",
-  }))
-
+ 
   return (
     <Card className="flex-1">
       <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {sampleCardData.length > 0 ? (
-          sampleCardData.map((card) => <SynopsisCard key={card.id} {...card} />)
-        ) : (
-          <p className="text-muted-foreground text-sm">No matching files found.</p>
-        )}
+
       </CardContent>
     </Card>
   )
