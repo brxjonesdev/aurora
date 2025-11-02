@@ -39,19 +39,43 @@ const fakeData: Manuscript = {
   totalCharacterCount: 0,
 }
 
-export default function Cards({ fileSlug }: { fileSlug?: string }) {
-  // find the folder that matches the slug
-  const folder = fakeData.content.find(
-    (item): item is Folder => item.type === "folder" && item.slug === fileSlug
-  )
+// Recursive search function
+function findItemBySlug(
+  items: (Folder | File)[],
+  slug: string
+): Folder | File | undefined {
+  for (const item of items) {
+    if (item.slug === slug) return item
+    if (item.type === "folder" && item.children) {
+      const found = findItemBySlug(item.children, slug)
+      if (found) return found
+    }
+  }
+  return undefined
+}
 
-  // if folder is found, show its children; otherwise show top-level content
-  const itemsToRender = folder ? folder.children : fakeData.content
+export default function Cards({ fileSlug }: { fileSlug?: string }) {
+  if (!fileSlug)
+    return <div className="flex items-center justify-center h-64 text-muted-foreground">Select a document</div>
+
+  const file = findItemBySlug(fakeData.content, fileSlug)
+
+  if (!file) {
+    return <div className="flex items-center justify-center h-64 text-muted-foreground">File not found</div>
+  }
+
+  if (file.type === "file") {
+    return <div className="flex items-center justify-center h-64 text-muted-foreground">This file has no sub-docs</div>
+  }
+
+  if (!file.children || file.children.length === 0) {
+    return <div className="flex items-center justify-center h-64 text-muted-foreground">This folder has no sub-docs</div>
+  }
 
   return (
     <Card className="flex-1">
       <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {itemsToRender.map((item) => (
+        {file.children.map((item) => (
           <SynopsisCard
             key={item.id}
             id={item.id}

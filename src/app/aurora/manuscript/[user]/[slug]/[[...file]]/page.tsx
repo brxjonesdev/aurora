@@ -41,7 +41,7 @@ export default async function ManuscriptPage({
   searchParams,
 }: {
   params: Promise<{ user: string; slug: string; file?: string }>;
-  searchParams: Promise<{ view: "editor" | "board"}>;
+  searchParams: Promise<{ view: "editor" | "cards"}>;
 }) {
   const { user, slug, file } = await params;
   const { view } = await searchParams;
@@ -60,8 +60,9 @@ export default async function ManuscriptPage({
   <section className="p-4 flex-1 flex flex-col gap-2">
     <ManuscriptMenubar fileName={file} />
     <ManuscriptDashboard
-        file={file!}
-        defaultView={view ?? "board"}
+
+        file={file[0]}
+        defaultView={view ?? "cards"}
       />
   </section>);
 }

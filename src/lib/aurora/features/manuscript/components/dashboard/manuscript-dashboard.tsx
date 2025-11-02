@@ -6,15 +6,15 @@ import Cards from "@/lib/aurora/features/manuscript/components/dashboard/board";
 
 type Props = {
   file: string;
-  defaultView: "editor" | "board";
+  defaultView: "editor" | "cards";
 };
 
 export default function ManuscriptDashboard({
   file,
-  defaultView,
+    defaultView,
 }: Props) {
   const searchParams = useSearchParams();
-  const view = (searchParams.get("view") as "editor" | "board") ?? defaultView;
+  const view = (searchParams.get("view") as "editor" | "cards") ?? defaultView;
   return (
     <div className="flex flex-col flex-1 gap-2">
 
