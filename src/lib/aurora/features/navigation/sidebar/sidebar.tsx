@@ -1,43 +1,46 @@
 'use client';
-import { SidebarContent, SidebarFooter, Sidebar } from '@/lib/shared/components/ui/sidebar';
-import { useParams } from 'next/navigation';
+import {
+  SidebarContent,
+  SidebarFooter,
+  Sidebar,
+  SidebarHeader,
+} from '@/lib/shared/components/ui/sidebar';
+import { useParams, usePathname } from 'next/navigation';
 import Header from './header';
 import ViewSelect from '../../../core/views/timeline/sidebar/view-select';
 import ThreadSelect from '../../../core/views/timeline/sidebar/thread-select';
 import UserMenu from '@/lib/shared/components/navbar-components/user-menu';
-import { usePathname } from 'next/navigation';
-import StoryOrganizer from '../../manuscript/components/sidebar/story-organizer';
+
+import React from 'react';
+import StoryOrganizer from '../../manuscript/components/sidebar/manuscript-file-tree';
 
 export function AppSidebar() {
-  const params = useParams<{
-    user: string;
-    slug: string;
-    view: string;
-  }>();
-
+  const params = useParams<{ user: string; slug: string; view: string }>();
   const pathname = usePathname();
-  const view: string = pathname.split('/')[2];
+  const view = pathname.split('/')[2];
 
-  if (!params?.user || !params?.slug) {
-    return null;
-  }
+  if (!params?.user || !params?.slug) return null;
+
+  const sidebarSections: Record<string, React.ReactNode> = {
+    plotweaver: (
+      <>
+        <ViewSelect />
+        <ThreadSelect />
+      </>
+    ),
+    manuscript: <StoryOrganizer />,
+  };
+
+  const sectionContent = sidebarSections[view] ?? null;
 
   return (
     <Sidebar className="w-64">
-      <Header user={params.user} slug={params.slug} />
-      <SidebarContent>
-        {view === 'plotweaver' ? (
-          <>
-            <ViewSelect />
-            <ThreadSelect />
-          </>
-        ) : null}
-        {view === 'manuscript' ? (
-          <>
-          <StoryOrganizer/>
-          </>
-        ) : null}
-      </SidebarContent>
+      <SidebarHeader>
+        <Header user={params.user} slug={params.slug} />
+      </SidebarHeader>
+
+      <SidebarContent>{sectionContent}</SidebarContent>
+
       <SidebarFooter>
         <UserMenu />
       </SidebarFooter>

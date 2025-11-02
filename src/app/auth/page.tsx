@@ -8,7 +8,7 @@ export default function Auth() {
   const [mode, setMode] = React.useState<'login' | 'register'>('login');
 
   return (
-    <main className="bg-background flex min-h-screen flex-col items-center justify-center">
+    <main className="bg-background flex min-h-screen w-full flex-col items-center justify-center">
       <section className="flex w-full flex-1 items-center justify-center p-4 lg:p-8">
         <AnimatePresence mode="wait">
           {mode === 'login' ? (

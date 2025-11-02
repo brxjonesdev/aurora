@@ -7,7 +7,7 @@ export default function StoryCard({ story, username }: { story: Story; username:
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/aurora/plotweaver/${username}/${story.slug}/timeline`);
+    router.push(`/aurora/manuscript/${username}/${story.slug}`);
   };
 
   return (
