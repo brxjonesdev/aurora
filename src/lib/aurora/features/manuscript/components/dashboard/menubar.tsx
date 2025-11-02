@@ -1,6 +1,6 @@
-"use client"
-import { useState } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+'use client';
+import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
@@ -8,43 +8,50 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/lib/shared/components/ui/dialog"
-import { Button } from "@/lib/shared/components/ui/button"
-import { Input } from "@/lib/shared/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/lib/shared/components/ui/select"
-import { LayoutGrid, LayoutList, Search, ExternalLink, Download } from "lucide-react"
+} from '@/lib/shared/components/ui/dialog';
+import { Button } from '@/lib/shared/components/ui/button';
+import { Input } from '@/lib/shared/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/lib/shared/components/ui/select';
+import { LayoutGrid, LayoutList, Search, ExternalLink, Download } from 'lucide-react';
 
-export default function ManuscriptMenubar({
-  fileName,
-}: {
-  fileName?: string
-}) {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const view = (searchParams.get("view") as "editor" | "cards") ?? "editor"
+export default function ManuscriptMenubar({ fileName }: { fileName?: string }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const view = (searchParams.get('view') as 'editor' | 'cards') ?? 'editor';
 
-  const [searchScope, setSearchScope] = useState("document")
-  const [exportDialogOpen, setExportDialogOpen] = useState(false)
+  const [searchScope, setSearchScope] = useState('document');
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
 
   const handleViewToggle = () => {
-    const newView = view === "cards" ? "editor" : "cards"
-    const params = new URLSearchParams(searchParams.toString())
-    params.set("view", newView)
-    router.push(`?${params.toString()}`)
-  }
+    const newView = view === 'cards' ? 'editor' : 'cards';
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', newView);
+    router.push(`?${params.toString()}`);
+  };
 
   const handleQuickRef = () => {
-    window.open("https://docs.example.com/quick-reference", "_blank", "width=800,height=600")
-  }
+    window.open('https://docs.example.com/quick-reference', '_blank', 'width=800,height=600');
+  };
 
   const formattedFileName = fileName
-    ? fileName[0].replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
-    : "Untitled Document"
+    ? fileName[0].replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+    : 'Untitled Document';
 
   return (
-    <div className="flex items-center gap-4 border-b pb-2 mb-2">
-      <Button variant="outline" size="sm" onClick={handleViewToggle} className="gap-2 bg-transparent">
-        {view === "cards" ? (
+    <div className="mb-2 flex items-center gap-4 border-b pb-2">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleViewToggle}
+        className="gap-2 bg-transparent"
+      >
+        {view === 'cards' ? (
           <>
             <LayoutList className="h-4 w-4" />
             Editor
@@ -58,15 +65,15 @@ export default function ManuscriptMenubar({
       </Button>
 
       {/* Filename Display */}
-      <div className="flex-1 h-full text-sm font-medium text-blue-300/70 truncate bg-blue-300/10 flex items-center justify-center rounded-lg">
+      <div className="flex h-full flex-1 items-center justify-center truncate rounded-lg bg-blue-300/10 text-sm font-medium text-blue-300/70">
         {formattedFileName}
       </div>
 
       {/* Search with Scope */}
       <div className="flex items-center gap-2">
         <div className="relative">
-          <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input type="text" placeholder="Search..." className="pl-8 w-48" />
+          <Search className="absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Input type="text" placeholder="Search..." className="w-48 pl-8" />
         </div>
         <Select value={searchScope} onValueChange={setSearchScope}>
           <SelectTrigger className="w-40">
@@ -119,5 +126,5 @@ export default function ManuscriptMenubar({
         Quick Ref
       </Button>
     </div>
-  )
+  );
 }

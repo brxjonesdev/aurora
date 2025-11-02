@@ -6,7 +6,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/lib/shared/components/ui/dropdown-menu';
-import { BookOpen, Globe, Users, Pen, StickyNote, ChevronRight, ArrowLeftIcon, SettingsIcon } from 'lucide-react';
+import {
+  BookOpen,
+  Globe,
+  Users,
+  Pen,
+  StickyNote,
+  ChevronRight,
+  ArrowLeftIcon,
+  SettingsIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 
 export default function Header({ user, slug }: { user: string; slug: string }) {
@@ -67,14 +76,14 @@ export default function Header({ user, slug }: { user: string; slug: string }) {
         ))}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link 
-          href={`/aurora/settings/${user}/${slug}`}
-          className="hover: flex cursor-pointer items-center gap-2 hover:bg-blue-300/30"
+          <Link
+            href={`/aurora/settings/${user}/${slug}`}
+            className="hover: flex cursor-pointer items-center gap-2 hover:bg-blue-300/30"
           >
             <SettingsIcon className="size-3" />
             <span>Story Settings</span>
           </Link>
-          </DropdownMenuItem>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
             href="/aurora/home"
