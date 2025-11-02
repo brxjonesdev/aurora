@@ -4,6 +4,7 @@ import Editor from '@/lib/aurora/features/manuscript/components/dashboard/editor
 import Cards from '@/lib/aurora/features/manuscript/components/dashboard/board';
 import { redirect } from 'next/navigation';
 import { Manuscript } from '@/lib/aurora/core/types/manuscript';
+import ManuscriptDashboard from '@/lib/aurora/features/manuscript/components/dashboard/manuscript-dashboard';
 
 const fakeData: Manuscript = {
   id: '1',
@@ -57,7 +58,10 @@ export default async function ManuscriptPage({
   // const result = await 
   return (
   <section className="p-4 flex-1 flex flex-col gap-2">
-    <ManuscriptMenubar />
-    {view === "editor" ? <Editor /> : <Cards fileSlug={file} /> }
+    <ManuscriptMenubar fileName={file} />
+    <ManuscriptDashboard
+        file={file!}
+        defaultView={view ?? "board"}
+      />
   </section>);
 }

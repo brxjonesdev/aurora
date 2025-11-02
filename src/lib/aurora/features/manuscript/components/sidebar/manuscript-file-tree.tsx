@@ -17,9 +17,8 @@ import {
   DropdownMenuTrigger,
 } from "@/lib/shared/components/ui/dropdown-menu"
 import { PlusCircleIcon, PlusIcon } from "lucide-react"
-import { Folder, File } from "@/lib/aurora/core/types/manuscript"
+import type { Folder, File } from "@/lib/aurora/core/types/manuscript"
 import { usePathname, useRouter } from "next/navigation"
-
 
 const fakeData: Array<Folder | File> = [
   {
@@ -27,9 +26,7 @@ const fakeData: Array<Folder | File> = [
     type: "folder",
     name: "Chapter 1",
     slug: "chapter-1",
-    labels: [
-      { value: "important", label: "Important", color: "#ef4444" },
-    ],
+    labels: [{ value: "important", label: "Important", color: "#ef4444" }],
     children: [
       { type: "file", name: "Scene 1.md", id: "4342", slug: "scene-1", hoverSynopsis: "The opening scene" },
       { type: "file", name: "Scene 2.md", id: "232423", slug: "scene-2", hoverSynopsis: "The second scene" },
@@ -42,14 +39,12 @@ const fakeData: Array<Folder | File> = [
     id: "3",
     slug: "introduction",
     hoverSynopsis: "Introduction to the story",
-    status: { value: "in-progress", label: "In Progress", color: "#fbbf24"},
-    labels: [
-      { value: "draft", label: "Draft", color: "#f59e0b" },
-    ],
+    status: { value: "in-progress", label: "In Progress", color: "#fbbf24" },
+    labels: [{ value: "draft", label: "Draft", color: "#f59e0b" }],
   },
 ]
 
-export default function StoryOrganizer({user, story}: {user: string; story: string}) {
+export default function StoryOrganizer({ user, story }: { user: string; story: string }) {
   const router = useRouter()
   const pathname = usePathname()
   const [manuscriptData, setManuscriptData] = useState<Array<Folder | File>>([])
@@ -214,61 +209,116 @@ export default function StoryOrganizer({user, story}: {user: string; story: stri
   }
 
   const moveItem = (sourcePath: number[], destinationFolderId: string) => {
-  setManuscriptData((prevData) => {
-    if (!prevData) return prevData
+    setManuscriptData((prevData) => {
+      if (!prevData) return prevData
 
-    const newData = JSON.parse(JSON.stringify(prevData))
+      const newData = JSON.parse(JSON.stringify(prevData))
 
-    // Helper to locate folder by ID
-    const findFolderById = (items: Array<Folder | File>, id: string): Folder | null => {
-      for (const item of items) {
-        if (item.type === "folder") {
-          if (item.id === id) return item
-          const found = findFolderById(item.children, id)
-          if (found) return found
+      // Helper to locate folder by ID
+      const findFolderById = (items: Array<Folder | File>, id: string): Folder | null => {
+        for (const item of items) {
+          if (item.type === "folder") {
+            if (item.id === id) return item
+            const found = findFolderById(item.children, id)
+            if (found) return found
+          }
+        }
+        return null
+      }
+
+      // Get item and remove it from its source
+      let sourceLevel: Array<Folder | File> = newData
+      for (let i = 0; i < sourcePath.length - 1; i++) {
+        const current = sourceLevel[sourcePath[i]]
+        if (current.type === "folder") {
+          sourceLevel = current.children
+        } else {
+          return prevData // invalid path
         }
       }
-      return null
-    }
 
-    // Get item and remove it from its source
-    let sourceLevel: Array<Folder | File> = newData
-    for (let i = 0; i < sourcePath.length - 1; i++) {
-      const current = sourceLevel[sourcePath[i]]
-      if (current.type === "folder") {
-        sourceLevel = current.children
-      } else {
-        return prevData // invalid path
+      const [movedItem] = sourceLevel.splice(sourcePath[sourcePath.length - 1], 1)
+      if (!movedItem) return prevData
+
+      // Prevent moving a folder into itself or its descendants
+      if (movedItem.type === "folder" && movedItem.id === destinationFolderId) return prevData
+
+      // Find destination folder
+      const destinationFolder = findFolderById(newData, destinationFolderId)
+      if (!destinationFolder) return prevData
+
+      // Prevent circular move (dropping a parent into its child)
+      const isDescendant = (folder: Folder, id: string): boolean => {
+        return folder.children.some((child) => child.type === "folder" && (child.id === id || isDescendant(child, id)))
       }
-    }
+      if (
+        destinationFolder.type === "folder" &&
+        movedItem.type === "folder" &&
+        isDescendant(movedItem, destinationFolderId)
+      ) {
+        return prevData
+      }
 
-    const [movedItem] = sourceLevel.splice(sourcePath[sourcePath.length - 1], 1)
-    if (!movedItem) return prevData
+      // Add to destination
+      destinationFolder.children.push(movedItem)
 
-    // Prevent moving a folder into itself or its descendants
-    if (movedItem.type === "folder" && movedItem.id === destinationFolderId) return prevData
+      return newData
+    })
+  }
 
-    // Find destination folder
-    const destinationFolder = findFolderById(newData, destinationFolderId)
-    if (!destinationFolder) return prevData
+  const reorderItem = (sourcePath: number[], targetPath: number[], position: "before" | "after" | "inside") => {
+    setManuscriptData((prevData) => {
+      if (!prevData) return prevData
 
-    // Prevent circular move (dropping a parent into its child)
-    const isDescendant = (folder: Folder, id: string): boolean => {
-      return folder.children.some(
-        (child) =>
-          (child.type === "folder" && (child.id === id || isDescendant(child, id)))
-      )
-    }
-    if (destinationFolder.type === "folder" && movedItem.type === "folder" && isDescendant(movedItem, destinationFolderId)) {
-      return prevData
-    }
+      const newData = JSON.parse(JSON.stringify(prevData))
 
-    // Add to destination
-    destinationFolder.children.push(movedItem)
+      const getParentPath = (path: number[]) => path.slice(0, -1)
+      const getIndex = (path: number[]) => path[path.length - 1]
 
-    return newData
-  })
-}
+      // Navigate to source level and remove item
+      let sourceLevel: Array<Folder | File> = newData
+      for (let i = 0; i < sourcePath.length - 1; i++) {
+        const current = sourceLevel[sourcePath[i]]
+        if (current.type === "folder") {
+          sourceLevel = current.children
+        } else {
+          return prevData
+        }
+      }
+
+      const sourceIndex = getIndex(sourcePath)
+      const [movedItem] = sourceLevel.splice(sourceIndex, 1)
+      if (!movedItem) return prevData
+
+      // Adjust target path if moving within same parent
+      const sourceParentPath = getParentPath(sourcePath)
+      const targetParentPath = getParentPath(targetPath)
+      const sameParent = JSON.stringify(sourceParentPath) === JSON.stringify(targetParentPath)
+
+      const adjustedTargetPath = [...targetPath]
+      if (sameParent && sourceIndex < getIndex(targetPath)) {
+        adjustedTargetPath[adjustedTargetPath.length - 1] -= 1
+      }
+
+      // Navigate to target level
+      let targetLevel: Array<Folder | File> = newData
+      for (let i = 0; i < adjustedTargetPath.length - 1; i++) {
+        const current = targetLevel[adjustedTargetPath[i]]
+        if (current.type === "folder") {
+          targetLevel = current.children
+        } else {
+          return prevData
+        }
+      }
+
+      const targetIndex = getIndex(adjustedTargetPath)
+      const insertIndex = position === "before" ? targetIndex : targetIndex + 1
+
+      targetLevel.splice(insertIndex, 0, movedItem)
+
+      return newData
+    })
+  }
 
   const getAllFolders = (items: Array<Folder | File>, currentId?: string): Array<{ id: string; name: string }> => {
     const folders: Array<{ id: string; name: string }> = []
@@ -284,11 +334,10 @@ export default function StoryOrganizer({user, story}: {user: string; story: stri
   const handleSelect = (targetFileSlug: string, id: string, type: "file" | "folder") => {
     console.log("Selected:", targetFileSlug, id, type)
     setSelectedId(id)
-    router.push(`/aurora/manuscript/${user}/${story}/${targetFileSlug}/${type === "folder" ? "?view=cards" : "?view=editor"}`)
+    router.push(
+      `/aurora/manuscript/${user}/${story}/${targetFileSlug}/${type === "folder" ? "?view=cards" : "?view=editor"}`,
+    )
   }
-
-
-
 
   return (
     <SidebarGroup>
@@ -325,8 +374,8 @@ export default function StoryOrganizer({user, story}: {user: string; story: stri
               onDuplicate={duplicateItem}
               onSelect={handleSelect}
               onMove={moveItem}
+              onReorder={reorderItem}
               allFolders={getAllFolders(manuscriptData, item.type === "folder" ? item.id : undefined)}
-
             />
           ))}
         </SidebarMenu>

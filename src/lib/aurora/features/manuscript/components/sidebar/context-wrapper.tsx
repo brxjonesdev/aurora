@@ -20,26 +20,11 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from "@/lib/shared/components/ui/alert-dialog"
-import {
-  AlertCircle,
-  CheckCircle,
-  CheckCircle2,
-  Circle,
-  Clock,
-  Copy,
-  Edit,
-  FolderInput,
-  Plus,
-  Tag,
-  Trash2,
-  X,
-  Check,
-} from "lucide-react"
+import { AlertCircle, CheckCircle, Circle, Clock, Copy, Edit, FolderInput, Plus, Trash2, X, Check } from "lucide-react"
 import { Input } from "@/lib/shared/components/ui/input"
 import LabelSelect from "./label-select"
-import { Folder, File } from "@/lib/aurora/core/types/manuscript"
+import type { Folder, File } from "@/lib/aurora/core/types/manuscript"
 import StatusSelect from "./status-select"
-
 
 let currentHoverSetter: React.Dispatch<React.SetStateAction<boolean>> | null = null
 
@@ -146,13 +131,9 @@ export default function ContextWrapper({
 
       <ContextMenuSeparator />
 
-      <LabelSelect
-        selectedLabels={item && "labels" in item ? item.labels || [] : []}
-      />
+      <LabelSelect selectedLabels={item && "labels" in item ? item.labels || [] : []} />
 
-      <StatusSelect
-        selectedStatus={item && "status" in item ? item.status || null : null}
-      />
+      <StatusSelect selectedStatus={item && "status" in item ? item.status || null : null} />
 
       <ContextMenuSub>
         <ContextMenuSubTrigger>
