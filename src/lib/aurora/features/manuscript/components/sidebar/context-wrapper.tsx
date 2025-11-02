@@ -80,9 +80,9 @@ export default function ContextWrapper({
   onDelete,
   onAddFile,
   onAddFolder,
-  availableFolderDestinations,
   onMove,
   onDuplicate,
+  allFolders,
 }: {
   children: React.ReactNode
   name?: string
@@ -90,20 +90,19 @@ export default function ContextWrapper({
   itemType: string
   itemPath: number[]
   item?: File | Folder
-  onUpdate?: (updates: Partial<File | Folder>, path: number[]) => void
+  onUpdate?: (updates: Folder | File, path: number[]) => void
   onDelete?: (path: number[]) => void
   onAddFile?: (path: number[]) => void
   onAddFolder?: (path: number[]) => void
-  availableFolderDestinations?: { id: string; name: string }[]
   onMove?: (sourcePath: number[], destinationFolderId: string) => void
-  onDuplicate?: (sourcePath: number[]) => void
+  onDuplicate?: (item: Folder | File, path: number[]) => void
+  allFolders?: Array<{ id: string; name: string }>
 }) {
   const [hoverOpen, setHoverOpen] = React.useState(false)
   const [contextOpen, setContextOpen] = React.useState(false)
   const [editingMode, setEditingMode] = React.useState<"rename" | "synopsis" | null>(null)
   const [editValue, setEditValue] = React.useState(name || "")
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
-  const [availableFolders, setAvailableFolders] = React.useState<{ id: string; name: string }[]>([])
 
   React.useEffect(() => {
     return () => {
@@ -115,16 +114,10 @@ export default function ContextWrapper({
     setEditValue(name || "")
   }, [name])
 
-  React.useEffect(() => {
-    if (availableFolderDestinations) {
-      setAvailableFolders(availableFolderDestinations)
-    }
-  }, [availableFolderDestinations])
-
   const handleRenameSubmit = () => {
     const trimmed = editValue.trim()
     if (trimmed && trimmed !== name) {
-      onUpdate?.({ name: trimmed }, itemPath)
+      onUpdate?.({ ...item!, name: trimmed }, itemPath)
     }
     setEditingMode(null)
   }
@@ -137,13 +130,14 @@ export default function ContextWrapper({
   const handleAddFileToFolder = () => onAddFile?.(itemPath)
   const handleAddFolderToFolder = () => onAddFolder?.(itemPath)
 
-  const handleMoveToFolder = (folderId: string) => {
-    onMove?.(itemPath, folderId)
+  const handleDuplicate = (item: Folder | File) => {
+    console.log("duplicating item", item, itemPath)
+    onDuplicate?.(item, itemPath)
     setContextOpen(false)
   }
 
-  const handleDuplicate = () => {
-    onDuplicate?.(itemPath)
+  const handleMoveToFolder = (destinationFolderId: string) => {
+    onMove?.(itemPath, destinationFolderId)
     setContextOpen(false)
   }
 
@@ -203,17 +197,21 @@ export default function ContextWrapper({
           Move to Folder
         </ContextMenuSubTrigger>
         <ContextMenuSubContent className="w-48">
-          {availableFolderDestinations?.map((folder) => (
-            <ContextMenuItem key={folder.id} onClick={() => handleMoveToFolder(folder.id)}>
-              {folder.name}
-            </ContextMenuItem>
-          ))}
+          {allFolders && allFolders.length > 0 ? (
+            allFolders.map((folder) => (
+              <ContextMenuItem key={folder.id} onClick={() => handleMoveToFolder(folder.id)}>
+                {folder.name}
+              </ContextMenuItem>
+            ))
+          ) : (
+            <div className="px-2 py-1.5 text-xs text-muted-foreground">No folders available</div>
+          )}
         </ContextMenuSubContent>
       </ContextMenuSub>
 
       <ContextMenuSeparator />
 
-      <ContextMenuItem onClick={handleDuplicate}>
+      <ContextMenuItem onClick={() => item && handleDuplicate(item)}>
         <Copy className="mr-2 h-4 w-4" />
         Duplicate
       </ContextMenuItem>

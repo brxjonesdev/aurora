@@ -10,7 +10,12 @@ import {
 } from "@/lib/shared/components/ui/sidebar"
 import { useEffect, useState } from "react"
 import Tree from "./tree"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/lib/shared/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/lib/shared/components/ui/dropdown-menu"
 import { PlusCircleIcon, PlusIcon } from "lucide-react"
 
 interface File {
@@ -166,12 +171,116 @@ export default function StoryOrganizer() {
     })
   }
 
-  // available ids of folders to be used for something
-  const availableFolderIds: { id: string; name: string }[] = []
-  for (const item of manuscriptData) {
-    if (item.type === "folder") {
-      availableFolderIds.push({ id: item.id, name: item.name })
+  const duplicateItem = (item: Folder | File, path: number[]) => {
+    console.log("Duplicating item at path:", path, item)
+    setManuscriptData((prevData) => {
+      if (!prevData) return prevData
+
+      const newData = JSON.parse(JSON.stringify(prevData))
+      let currentLevel: Array<Folder | File> = newData
+
+      const cloneWithNewIds = (node: Folder | File): Folder | File => {
+        const newId = `${Date.now()}-${Math.random()}`
+        if (node.type === "file") {
+          return {
+            ...node,
+            id: newId,
+            slug: `duplicate-${newId}`,
+            name: node.name.replace(/(\.md)?$/, " Copy$1"),
+          }
+        } else {
+          return {
+            ...node,
+            id: newId,
+            name: `${node.name} Copy`,
+            children: node.children.map(cloneWithNewIds),
+          }
+        }
+      }
+
+      for (let i = 0; i < path.length; i++) {
+        const index = path[i]
+        if (i === path.length - 1) {
+          const newItem = cloneWithNewIds(item)
+          currentLevel.splice(index + 1, 0, newItem)
+        } else if (currentLevel[index].type === "folder") {
+          currentLevel = (currentLevel[index] as Folder).children
+        } else {
+          break
+        }
+      }
+
+      return newData
+    })
+  }
+
+  const moveItem = (sourcePath: number[], destinationFolderId: string) => {
+  setManuscriptData((prevData) => {
+    if (!prevData) return prevData
+
+    const newData = JSON.parse(JSON.stringify(prevData))
+
+    // Helper to locate folder by ID
+    const findFolderById = (items: Array<Folder | File>, id: string): Folder | null => {
+      for (const item of items) {
+        if (item.type === "folder") {
+          if (item.id === id) return item
+          const found = findFolderById(item.children, id)
+          if (found) return found
+        }
+      }
+      return null
     }
+
+    // Get item and remove it from its source
+    let sourceLevel: Array<Folder | File> = newData
+    for (let i = 0; i < sourcePath.length - 1; i++) {
+      const current = sourceLevel[sourcePath[i]]
+      if (current.type === "folder") {
+        sourceLevel = current.children
+      } else {
+        return prevData // invalid path
+      }
+    }
+
+    const [movedItem] = sourceLevel.splice(sourcePath[sourcePath.length - 1], 1)
+    if (!movedItem) return prevData
+
+    // Prevent moving a folder into itself or its descendants
+    if (movedItem.type === "folder" && movedItem.id === destinationFolderId) return prevData
+
+    // Find destination folder
+    const destinationFolder = findFolderById(newData, destinationFolderId)
+    if (!destinationFolder) return prevData
+
+    // Prevent circular move (dropping a parent into its child)
+    const isDescendant = (folder: Folder, id: string): boolean => {
+      return folder.children.some(
+        (child) =>
+          (child.type === "folder" && (child.id === id || isDescendant(child, id)))
+      )
+    }
+    if (destinationFolder.type === "folder" && movedItem.type === "folder" && isDescendant(movedItem, destinationFolderId)) {
+      return prevData
+    }
+
+    // Add to destination
+    destinationFolder.children.push(movedItem)
+
+    return newData
+  })
+}
+
+
+  const getAllFolders = (items: Array<Folder | File>): Array<{ id: string; name: string }> => {
+    const folders: Array<{ id: string; name: string }> = []
+    for (const item of items) {
+      if (item.type === "folder") {
+        folders.push({ id: item.id, name: item.name })
+        folders.push(...getAllFolders(item.children))
+      }
+    }
+    return folders
   }
 
   return (
@@ -198,14 +307,16 @@ export default function StoryOrganizer() {
         <SidebarMenu>
           {manuscriptData?.map((item, index) => (
             <Tree
-              key={index}
+              key={item.id}
               item={item}
               itemPath={[index]}
               onUpdate={updateItem}
               onDelete={deleteItem}
               onAddFile={addNewFile}
               onAddFolder={addNewFolder}
-              availableFolderDestinations={availableFolderIds}
+              onDuplicate={duplicateItem}
+              onMove={moveItem}
+              allFolders={getAllFolders(manuscriptData)}
             />
           ))}
         </SidebarMenu>

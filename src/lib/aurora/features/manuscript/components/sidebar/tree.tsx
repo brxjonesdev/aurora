@@ -29,15 +29,19 @@ export default function Tree({
   onDelete,
   onAddFile,
   onAddFolder,
-  availableFolderDestinations,
+  onDuplicate,
+  onMove,
+  allFolders,
 }: {
   item: TreeItem
   itemPath?: number[]
-  onUpdate?: (updates: Partial<Folder | File>, path: number[]) => void
+  onUpdate?: (updates: Folder | File, path: number[]) => void
   onDelete?: (path: number[]) => void
   onAddFile?: (path: number[]) => void
   onAddFolder?: (path: number[]) => void
-  availableFolderDestinations?: { id: string; name: string }[]
+  onDuplicate?: (item: Folder | File, path: number[]) => void
+  onMove?: (sourcePath: number[], destinationFolderId: string) => void
+  allFolders?: Array<{ id: string; name: string }>
 }) {
   if (item.type === "file") {
     return (
@@ -49,7 +53,9 @@ export default function Tree({
         item={item}
         onUpdate={onUpdate}
         onDelete={onDelete}
-        availableFolderDestinations={availableFolderDestinations}
+        onMove={onMove}
+        onDuplicate={onDuplicate}
+        allFolders={allFolders}
       >
         <SidebarMenuItem>
           <SidebarMenuButton isActive={false} className="text-xs data-[active=true]:bg-transparent">
@@ -71,7 +77,10 @@ export default function Tree({
       onUpdate={onUpdate}
       onDelete={onDelete}
       onAddFile={onAddFile}
+      onMove={onMove}
       onAddFolder={onAddFolder}
+      onDuplicate={onDuplicate}
+      allFolders={allFolders}
     >
       <SidebarMenuItem>
         <Collapsible
@@ -94,8 +103,11 @@ export default function Tree({
                   itemPath={[...itemPath, index]}
                   onUpdate={onUpdate}
                   onDelete={onDelete}
+                  onMove={onMove}
                   onAddFile={onAddFile}
                   onAddFolder={onAddFolder}
+                  onDuplicate={onDuplicate}
+                  allFolders={allFolders}
                 />
               ))}
             </SidebarMenuSub>
