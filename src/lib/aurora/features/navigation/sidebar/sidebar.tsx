@@ -17,7 +17,7 @@ import StoryOrganizer from '../../manuscript/components/sidebar/manuscript-file-
 export function AppSidebar() {
   const params = useParams<{ user: string; slug: string; view: string }>();
   const pathname = usePathname();
-  const view = pathname.split('/')[2];
+  const section = pathname.split('/')[2];
 
   if (!params?.user || !params?.slug) return null;
 
@@ -28,10 +28,10 @@ export function AppSidebar() {
         <ThreadSelect />
       </>
     ),
-    manuscript: <StoryOrganizer />,
+    manuscript: <StoryOrganizer user={params.user} story={params.slug} />,
   };
 
-  const sectionContent = sidebarSections[view] ?? null;
+  const sectionContent = sidebarSections[section] ?? null;
 
   return (
     <Sidebar className="w-64">

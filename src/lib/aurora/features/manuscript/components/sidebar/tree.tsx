@@ -16,6 +16,7 @@ export default function Tree({
   onAddFolder,
   onDuplicate,
   onMove,
+  onSelect,
   allFolders,
   selectedId,
 }: {
@@ -29,8 +30,8 @@ export default function Tree({
   onMove?: (sourcePath: number[], destinationFolderId: string) => void
   allFolders?: Array<{ id: string; name: string }>
   selectedId?: string | null
+  onSelect?: (targetFileSlug: string, id: string, type: "file" | "folder") => void
 }) {
-
   if (item.type === "file") {
     return (
       <ContextWrapper
@@ -46,12 +47,15 @@ export default function Tree({
         allFolders={allFolders}
       >
         <SidebarMenuItem
-          className={`cursor-pointer ${
-            selectedId === item.id ? "bg-accent/50" : "hover:bg-accent/20"
-          }`}
+          className="cursor-pointer rounded"
+          onClick={() => onSelect?.(item.slug, item.id, item.type)}
         >
           <SidebarMenuButton
-            className="text-xs data-[active=true]:bg-transparent"
+            className={`text-xs rounded ${
+              selectedId === item.id 
+                ? "bg-blue-300/30 hover:bg-blue-300/30" 
+                : "bg-transparent hover:bg-cyan-300/30"
+            } focus-visible:ring-0 focus-visible:ring-offset-0`}
           >
             <FileIcon className="size-4" />
             {item.name}
@@ -60,7 +64,6 @@ export default function Tree({
       </ContextWrapper>
     )
   }
-
 
   return (
     <ContextWrapper
@@ -84,16 +87,18 @@ export default function Tree({
         >
           <CollapsibleTrigger asChild>
             <SidebarMenuButton
-              className={`text-xs ${
-                selectedId === item.id ? "bg-accent/50" : "hover:bg-accent/20"
-              }`}
+              className={`text-xs rounded ${
+                selectedId === item.id
+                  ? "bg-blue-300/30 hover:bg-blue-300/30"
+                  : "bg-transparent hover:bg-cyan-300/30"
+              } focus-visible:ring-0 focus-visible:ring-offset-0`}
+              onClick={() => onSelect?.(item.slug, item.id, item.type)}
             >
               <ChevronRight className="transition-transform size-4" />
               <FolderIcon className="size-4" />
               {item.name}
             </SidebarMenuButton>
           </CollapsibleTrigger>
-
           <CollapsibleContent>
             <SidebarMenuSub>
               {item.children.map((child, index) => (
@@ -107,6 +112,7 @@ export default function Tree({
                   onAddFile={onAddFile}
                   onAddFolder={onAddFolder}
                   onDuplicate={onDuplicate}
+                  onSelect={onSelect}
                   allFolders={allFolders}
                   selectedId={selectedId}
                 />

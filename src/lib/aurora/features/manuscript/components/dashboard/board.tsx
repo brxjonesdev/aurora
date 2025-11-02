@@ -1,4 +1,5 @@
 "use client"
+
 import { Card, CardContent } from "@/lib/shared/components/ui/card"
 import SynopsisCard from "./synopsis-card"
 import type { Folder, File, Manuscript } from "@/lib/aurora/core/types/manuscript"
@@ -39,11 +40,25 @@ const fakeData: Manuscript = {
 }
 
 export default function Cards({ fileSlug }: { fileSlug?: string }) {
- 
+  // find the folder that matches the slug
+  const folder = fakeData.content.find(
+    (item): item is Folder => item.type === "folder" && item.slug === fileSlug
+  )
+
+  // if folder is found, show its children; otherwise show top-level content
+  const itemsToRender = folder ? folder.children : fakeData.content
+
   return (
     <Card className="flex-1">
       <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
+        {itemsToRender.map((item) => (
+          <SynopsisCard
+            key={item.id}
+            id={item.id}
+            title={item.name}
+            synopsis={item.hoverSynopsis ?? ""}
+          />
+        ))}
       </CardContent>
     </Card>
   )

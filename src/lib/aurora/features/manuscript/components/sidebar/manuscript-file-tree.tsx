@@ -49,7 +49,7 @@ const fakeData: Array<Folder | File> = [
   },
 ]
 
-export default function StoryOrganizer() {
+export default function StoryOrganizer({user, story}: {user: string; story: string}) {
   const router = useRouter()
   const pathname = usePathname()
   const [manuscriptData, setManuscriptData] = useState<Array<Folder | File>>([])
@@ -116,7 +116,7 @@ export default function StoryOrganizer() {
     type: "folder",
     name: `New Folder`,
     children: [],
-    slug: `overview/new-folder-${Date.now()}`,
+    slug: `new-folder-${Date.now()}`,
   })
 
   const createNewFile = (): File => ({
@@ -281,6 +281,12 @@ export default function StoryOrganizer() {
     return folders
   }
 
+  const handleSelect = (targetFileSlug: string, id: string, type: "file" | "folder") => {
+    console.log("Selected:", targetFileSlug, id, type)
+    setSelectedId(id)
+    router.push(`/aurora/manuscript/${user}/${story}/${targetFileSlug}/${type === "folder" ? "?view=cards" : "?view=editor"}`)
+  }
+
 
 
 
@@ -317,6 +323,7 @@ export default function StoryOrganizer() {
               onAddFile={addNewFile}
               onAddFolder={addNewFolder}
               onDuplicate={duplicateItem}
+              onSelect={handleSelect}
               onMove={moveItem}
               allFolders={getAllFolders(manuscriptData, item.type === "folder" ? item.id : undefined)}
 
