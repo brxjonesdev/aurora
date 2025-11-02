@@ -1,8 +1,8 @@
-import { err } from "@/lib/utils";
-import { ok } from "@/lib/utils";
+import { err } from '@/lib/utils';
+import { ok } from '@/lib/utils';
 
-import { IStoryRepository } from "../../interfaces/IStoriesRepo";
-import { Story, StoryCreate, DEFAULT_STORY_SETTINGS } from "../../../types/story";
+import { IStoryRepository } from '../../interfaces/IStoriesRepo';
+import { Story, StoryCreate, DEFAULT_STORY_SETTINGS } from '../../../types/story';
 
 export function createInMemoryStoryRepository(): IStoryRepository {
   let stories: Story[] = [];
@@ -36,17 +36,15 @@ export function createInMemoryStoryRepository(): IStoryRepository {
 
     async update(storyId, title, content) {
       const index = stories.findIndex((s) => s.id === storyId);
-      if (index === -1) return err("Story not found");
+      if (index === -1) return err('Story not found');
 
-      stories = stories.map((s, i) =>
-        i === index ? { ...s, title, content } : s
-      );
+      stories = stories.map((s, i) => (i === index ? { ...s, title, content } : s));
       return ok(undefined);
     },
 
     async delete(storyId) {
       const exists = stories.some((s) => s.id === storyId);
-      if (!exists) return err("Story not found");
+      if (!exists) return err('Story not found');
 
       stories = stories.filter((s) => s.id !== storyId);
       return ok(undefined);

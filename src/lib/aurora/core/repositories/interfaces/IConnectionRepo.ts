@@ -4,8 +4,8 @@ import {
   EventEventConnection,
   EventDependencyConnection,
   ConnectionType,
-} from "@/lib/aurora/core/types/connection";
-import { Result } from "@/lib/utils";
+} from '@/lib/aurora/core/types/connection';
+import { Result } from '@/lib/utils';
 
 export interface IConnectionRepository {
   // Create connections
@@ -21,26 +21,20 @@ export interface IConnectionRepository {
     type: ConnectionType
   ): Promise<Result<EventEventConnection, string>>;
   // Remove connections
-  removeEventToThreadConnection(
-    connectionID: string
-  ): Promise<Result<boolean, string>>;
+  removeEventToThreadConnection(connectionID: string): Promise<Result<boolean, string>>;
 
-  removeEventToEventConnection(
-    connectionID: string
-  ): Promise<Result<boolean, string>>;
+  removeEventToEventConnection(connectionID: string): Promise<Result<boolean, string>>;
 
   // Optional: query connections if needed
   getConnectionsByEvent(
     eventID: string
-  ): Promise<Result<
-    (EventThreadConnection | EventEventConnection | EventDependencyConnection)[],
-    string
-  >>;
+  ): Promise<
+    Result<(EventThreadConnection | EventEventConnection | EventDependencyConnection)[], string>
+  >;
 
   getConnectionsByStory(
     storyID: string
-  ): Promise<Result<
-    (EventThreadConnection | EventEventConnection | EventDependencyConnection)[],
-    string
-  >>;
+  ): Promise<
+    Result<(EventThreadConnection | EventEventConnection | EventDependencyConnection)[], string>
+  >;
 }

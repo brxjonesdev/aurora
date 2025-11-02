@@ -1,7 +1,7 @@
 // lib/services/serverServices.ts
-import { createInMemoryStoryRepository } from "./repositories/implementations/in-memory/InMemoryStoryRepo";
-import { createStoryService } from "./services/StoryService";
-import { createSupabaseStoryRepository } from "./repositories/implementations/supabase/SupabaseStoryRepo";
+import { createInMemoryStoryRepository } from './repositories/implementations/in-memory/InMemoryStoryRepo';
+import { createStoryService } from './services/StoryService';
+import { createSupabaseStoryRepository } from './repositories/implementations/supabase/SupabaseStoryRepo';
 
 /**
  * Creates all repositories and services for use in a Server Component or Server Action.

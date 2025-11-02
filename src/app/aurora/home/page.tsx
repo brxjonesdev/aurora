@@ -22,8 +22,6 @@ import CreateProfile from '@/lib/aurora/features/onboarding/components/create-pr
 import { createServices } from '@/lib/aurora/core/createServices';
 import Stories from './_components/stories';
 
-
-
 export default async function Homepage() {
   const { storyService } = createServices();
   let username = '';

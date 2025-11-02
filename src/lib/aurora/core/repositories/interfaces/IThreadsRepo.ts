@@ -1,5 +1,5 @@
-import { Result } from "@/lib/utils";
-import { ThreadCreate, Thread, ThreadUpdate } from "@/lib/aurora/core/types/thread";
+import { Result } from '@/lib/utils';
+import { ThreadCreate, Thread, ThreadUpdate } from '@/lib/aurora/core/types/thread';
 
 export interface IThreadsRepository {
   create(thread: ThreadCreate): Promise<Result<Thread, string>>;
