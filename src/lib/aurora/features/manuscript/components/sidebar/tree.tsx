@@ -3,22 +3,7 @@ import { SidebarMenuButton, SidebarMenuItem, SidebarMenuSub } from "@/lib/shared
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/lib/shared/components/ui/collapsible"
 import { ChevronRight, FolderIcon, FileIcon } from "lucide-react"
 import ContextWrapper from "./context-wrapper"
-
-interface File {
-  type: "file"
-  name: string
-  id: string
-  slug: string
-  hoverSynopsis?: string
-}
-
-interface Folder {
-  id: string
-  type: "folder"
-  name: string
-  children: Array<Folder | File>
-  hoverSynopsis?: string
-}
+import { Folder, File } from "@/lib/aurora/core/types/manuscript"
 
 type TreeItem = Folder | File
 
@@ -32,6 +17,8 @@ export default function Tree({
   onDuplicate,
   onMove,
   allFolders,
+  onClick,
+  selectedId,
 }: {
   item: TreeItem
   itemPath?: number[]
@@ -42,7 +29,10 @@ export default function Tree({
   onDuplicate?: (item: Folder | File, path: number[]) => void
   onMove?: (sourcePath: number[], destinationFolderId: string) => void
   allFolders?: Array<{ id: string; name: string }>
+  onClick?: (item: TreeItem) => void
+  selectedId?: string | null
 }) {
+
   if (item.type === "file") {
     return (
       <ContextWrapper
@@ -57,8 +47,18 @@ export default function Tree({
         onDuplicate={onDuplicate}
         allFolders={allFolders}
       >
-        <SidebarMenuItem>
-          <SidebarMenuButton isActive={false} className="text-xs data-[active=true]:bg-transparent">
+        <SidebarMenuItem
+          className={`cursor-pointer ${
+            selectedId === item.id ? "bg-accent/50" : "hover:bg-accent/20"
+          }`}
+        >
+          <SidebarMenuButton
+            className="text-xs data-[active=true]:bg-transparent"
+            onClick={(e) => {
+              e.stopPropagation() // prevent bubbling up to parent folder
+              onClick?.(item)
+            }}
+          >
             <FileIcon className="size-4" />
             {item.name}
           </SidebarMenuButton>
@@ -66,6 +66,7 @@ export default function Tree({
       </ContextWrapper>
     )
   }
+
 
   return (
     <ContextWrapper
@@ -88,17 +89,26 @@ export default function Tree({
           defaultOpen={false}
         >
           <CollapsibleTrigger asChild>
-            <SidebarMenuButton className="text-xs">
+            <SidebarMenuButton
+              className={`text-xs ${
+                selectedId === item.id ? "bg-accent/50" : "hover:bg-accent/20"
+              }`}
+              onClick={(e) => {
+                e.stopPropagation() // prevent triggering parent's click
+                onClick?.(item)
+              }}
+            >
               <ChevronRight className="transition-transform size-4" />
               <FolderIcon className="size-4" />
               {item.name}
             </SidebarMenuButton>
           </CollapsibleTrigger>
+
           <CollapsibleContent>
             <SidebarMenuSub>
               {item.children.map((child, index) => (
                 <Tree
-                  key={index}
+                  key={child.id}
                   item={child}
                   itemPath={[...itemPath, index]}
                   onUpdate={onUpdate}
@@ -108,6 +118,8 @@ export default function Tree({
                   onAddFolder={onAddFolder}
                   onDuplicate={onDuplicate}
                   allFolders={allFolders}
+                  onClick={onClick}
+                  selectedId={selectedId}
                 />
               ))}
             </SidebarMenuSub>

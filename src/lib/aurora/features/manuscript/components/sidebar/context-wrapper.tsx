@@ -36,22 +36,10 @@ import {
   Check,
 } from "lucide-react"
 import { Input } from "@/lib/shared/components/ui/input"
+import LabelSelect from "./label-select"
+import { Folder, File } from "@/lib/aurora/core/types/manuscript"
+import StatusSelect from "./status-select"
 
-interface File {
-  type: "file"
-  name: string
-  id: string
-  slug: string
-  hoverSynopsis?: string
-}
-
-interface Folder {
-  id: string
-  type: "folder"
-  name: string
-  children: Array<Folder | File>
-  hoverSynopsis?: string
-}
 
 let currentHoverSetter: React.Dispatch<React.SetStateAction<boolean>> | null = null
 
@@ -158,38 +146,13 @@ export default function ContextWrapper({
 
       <ContextMenuSeparator />
 
-      <ContextMenuSub>
-        <ContextMenuSubTrigger>
-          <Tag className="mr-2 h-4 w-4" />
-          Label
-        </ContextMenuSubTrigger>
-        <ContextMenuSubContent className="w-48">
-          {LABELS.map((label) => (
-            <ContextMenuItem key={label.value}>
-              <Tag className={`mr-2 h-4 w-4 ${label.color}`} />
-              {label.label}
-            </ContextMenuItem>
-          ))}
-        </ContextMenuSubContent>
-      </ContextMenuSub>
+      <LabelSelect
+        selectedLabels={item && "labels" in item ? item.labels || [] : []}
+      />
 
-      <ContextMenuSub>
-        <ContextMenuSubTrigger>
-          <CheckCircle2 className="mr-2 h-4 w-4" />
-          Status
-        </ContextMenuSubTrigger>
-        <ContextMenuSubContent className="w-48">
-          {STATUSES.map((status) => {
-            const Icon = status.icon
-            return (
-              <ContextMenuItem key={status.value}>
-                <Icon className="mr-2 h-4 w-4" />
-                {status.label}
-              </ContextMenuItem>
-            )
-          })}
-        </ContextMenuSubContent>
-      </ContextMenuSub>
+      <StatusSelect
+        selectedStatus={item && "status" in item ? item.status || null : null}
+      />
 
       <ContextMenuSub>
         <ContextMenuSubTrigger>

@@ -1,6 +1,24 @@
+export type Label = {
+  label: string
+  value: string
+  color: string
+}
+
+export type Status = {
+  label: string
+  value: string
+  color: string
+}
+
+
+
+
 export type Folder = {
   id: string
   type: "folder"
+  labels?: Label[]
+  status?: Status
+  slug: string
   name: string
   children: Array<Folder | File>
   hoverSynopsis?: string
@@ -11,8 +29,11 @@ export type File = {
   name: string
   id: string
   slug: string
+  labels?: Label[]
+  status?: Status
   hoverSynopsis?: string
 }
+
 
 export interface Manuscript {
     id: string;
@@ -24,3 +45,4 @@ export interface Manuscript {
     totalCharacterCount?: number;
     // Add other relevant fields as needed
 }
+

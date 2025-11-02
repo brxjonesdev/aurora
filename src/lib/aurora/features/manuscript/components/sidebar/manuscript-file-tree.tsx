@@ -17,28 +17,19 @@ import {
   DropdownMenuTrigger,
 } from "@/lib/shared/components/ui/dropdown-menu"
 import { PlusCircleIcon, PlusIcon } from "lucide-react"
+import { Folder, File } from "@/lib/aurora/core/types/manuscript"
+import { usePathname, useRouter } from "next/navigation"
 
-interface File {
-  type: "file"
-  name: string
-  id: string
-  slug: string
-  hoverSynopsis?: string
-}
-
-interface Folder {
-  id: string
-  type: "folder"
-  name: string
-  children: Array<Folder | File>
-  hoverSynopsis?: string
-}
 
 const fakeData: Array<Folder | File> = [
   {
     id: "1",
     type: "folder",
     name: "Chapter 1",
+    slug: "chapter-1",
+    labels: [
+      { value: "important", label: "Important", color: "#ef4444" },
+    ],
     children: [
       { type: "file", name: "Scene 1.md", id: "4342", slug: "scene-1", hoverSynopsis: "The opening scene" },
       { type: "file", name: "Scene 2.md", id: "232423", slug: "scene-2", hoverSynopsis: "The second scene" },
@@ -51,11 +42,18 @@ const fakeData: Array<Folder | File> = [
     id: "3",
     slug: "introduction",
     hoverSynopsis: "Introduction to the story",
+    status: { value: "in-progress", label: "In Progress", color: "#fbbf24"},
+    labels: [
+      { value: "draft", label: "Draft", color: "#f59e0b" },
+    ],
   },
 ]
 
 export default function StoryOrganizer() {
+  const router = useRouter()
+  const pathname = usePathname()
   const [manuscriptData, setManuscriptData] = useState<Array<Folder | File>>([])
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
   useEffect(() => {
     setManuscriptData(fakeData)
@@ -118,6 +116,7 @@ export default function StoryOrganizer() {
     type: "folder",
     name: `New Folder`,
     children: [],
+    slug: `overview/new-folder-${Date.now()}`,
   })
 
   const createNewFile = (): File => ({
@@ -271,17 +270,31 @@ export default function StoryOrganizer() {
   })
 }
 
-
-  const getAllFolders = (items: Array<Folder | File>): Array<{ id: string; name: string }> => {
+  const getAllFolders = (items: Array<Folder | File>, currentId?: string): Array<{ id: string; name: string }> => {
     const folders: Array<{ id: string; name: string }> = []
     for (const item of items) {
-      if (item.type === "folder") {
+      if (item.type === "folder" && item.id !== currentId) {
         folders.push({ id: item.id, name: item.name })
-        folders.push(...getAllFolders(item.children))
+        folders.push(...getAllFolders(item.children, currentId))
       }
     }
     return folders
   }
+
+const handleSelection = (item: Folder | File) => {
+    setSelectedId(item.id)
+    // Expected pathname format: /aurora/manuscript/[user]/[slug]
+    const pathSegments = pathname.split("/").filter(Boolean)
+    const userIndex = pathSegments.indexOf("manuscript")
+
+    if (userIndex !== -1 && userIndex + 2 < pathSegments.length) {
+      const user = pathSegments[userIndex + 1]
+      const slug = pathSegments[userIndex + 2]
+      const newPath = `/aurora/manuscript/${user}/${slug}/${item.slug}?view=cards`
+      router.push(newPath)
+    }
+  }
+
 
   return (
     <SidebarGroup>
@@ -309,6 +322,8 @@ export default function StoryOrganizer() {
             <Tree
               key={item.id}
               item={item}
+              selectedId={selectedId}
+              onClick={() => handleSelection(item)}
               itemPath={[index]}
               onUpdate={updateItem}
               onDelete={deleteItem}
@@ -316,7 +331,8 @@ export default function StoryOrganizer() {
               onAddFolder={addNewFolder}
               onDuplicate={duplicateItem}
               onMove={moveItem}
-              allFolders={getAllFolders(manuscriptData)}
+              allFolders={getAllFolders(manuscriptData, item.type === "folder" ? item.id : undefined)}
+
             />
           ))}
         </SidebarMenu>
