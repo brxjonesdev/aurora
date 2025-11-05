@@ -44,20 +44,6 @@ import StatusSelect from './status-select';
 
 let currentHoverSetter: React.Dispatch<React.SetStateAction<boolean>> | null = null;
 
-const LABELS = [
-  { value: 'important', label: 'Important', color: 'text-red-500' },
-  { value: 'draft', label: 'Draft', color: 'text-yellow-500' },
-  { value: 'review', label: 'Review', color: 'text-blue-500' },
-  { value: 'final', label: 'Final', color: 'text-green-500' },
-];
-
-const STATUSES = [
-  { value: 'not-started', label: 'Not Started', icon: Circle },
-  { value: 'in-progress', label: 'In Progress', icon: Clock },
-  { value: 'review', label: 'Review', icon: AlertCircle },
-  { value: 'completed', label: 'Completed', icon: CheckCircle },
-];
-
 export default function ContextWrapper({
   children,
   name,

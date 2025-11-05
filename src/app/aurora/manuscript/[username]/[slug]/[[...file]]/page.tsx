@@ -1,11 +1,10 @@
 import React from 'react';
-import ManuscriptMenubar from '@/lib/aurora/features/manuscript/components/dashboard/menubar';
-import Editor from '@/lib/aurora/features/manuscript/components/dashboard/editor';
-import Cards from '@/lib/aurora/features/manuscript/components/dashboard/board';
+import ManuscriptMenubar from '@/lib/aurora/features/manuscript/components/dashboard/menubar/menubar';
 import { redirect } from 'next/navigation';
 import { Manuscript } from '@/lib/aurora/core/types/manuscript';
 import ManuscriptDashboard from '@/lib/aurora/features/manuscript/components/dashboard/manuscript-dashboard';
-
+import { createClient } from '@/lib/supabase/server';
+import { checkAuthenticated } from '@/lib/aurora/features/auth-&-user/utils';
 const fakeData: Manuscript = {
   id: '1',
   storyId: 'story-1',
@@ -51,26 +50,25 @@ export default async function ManuscriptPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ user: string; slug: string; file?: string }>;
+  params: Promise<{ username: string; slug: string; file?: string }>;
   searchParams: Promise<{ view: 'editor' | 'cards' }>;
 }) {
-  const { user, slug, file } = await params;
+  const { username, slug, file } = await params;
   const { view } = await searchParams;
+  const supabase = await createClient();
+  await checkAuthenticated({ supabase, username });
   if (!view) {
     redirect(`?view=cards`);
   }
   // const result = await service.getManucriptBySlug(user, slug);
   const manuscript: Manuscript = fakeData;
-
-  // file is just the slug of the file or folder being viewed
   if (!file) {
-    redirect(`/aurora/manuscript/${user}/${slug}/${manuscript.content[0].slug}`);
+    redirect(`/aurora/manuscript/${username}/${slug}/${manuscript.content[0].slug}`);
   }
-  // const result = await
   return (
     <section className="flex flex-1 flex-col gap-2 p-4">
-      <ManuscriptMenubar fileName={file} />
-      <ManuscriptDashboard file={file[0]} defaultView={view ?? 'cards'} />
+      <ManuscriptMenubar fileName={file[0]} />
+      <ManuscriptDashboard file={file[0]} defaultView={view ?? "cards"}/>
     </section>
   );
 }

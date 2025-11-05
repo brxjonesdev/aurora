@@ -1,9 +1,7 @@
-import { File, Label, Status } from '@/lib/aurora/core/types/manuscript';
+import { Label, Status } from '@/lib/aurora/core/types/manuscript';
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -17,9 +15,8 @@ type SynopsisCardProps = {
   status?: Status;
 };
 export default function SynopsisCard({ id, title, synopsis, labels, status }: SynopsisCardProps) {
-  console.log(title, 'title in synopsis card');
   return (
-    <Card className='text-xs flex flex-col h-full'>
+    <Card className='text-xs flex flex-col h-full' key={id}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>

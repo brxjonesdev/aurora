@@ -12,7 +12,7 @@ export default function Stories({
   initialStories: Story[];
   username: string;
 }) {
-  // Get stories from store
+
   const stories = usePlotweaverStore((state) => state.stories);
   const setStories = usePlotweaverStore((state) => state.setStories);
 
