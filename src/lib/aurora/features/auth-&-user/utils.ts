@@ -41,10 +41,10 @@ export async function checkAuthenticated({
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
-    .eq('username', username || '')
+    .eq('user_id', user.id)
     .maybeSingle();
 
-  if (!profile) {
+  if (!profile || (username && profile.username !== username)) {
     redirect('/auth');
   }
 }

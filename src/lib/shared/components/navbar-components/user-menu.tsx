@@ -23,33 +23,29 @@ import Avatar from 'boring-avatars';
 import LogoutButton from '@/lib/aurora/features/auth-&-user/logout-btn';
 import { Card } from '../ui/card';
 
+const supabase = createClient();
+
 export default function UserMenu() {
-  const supabase = createClient();
   const [user, setUser] = useState<Profile | null>(null);
+
   useEffect(() => {
     const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data.user) {
-        setUser(null);
-        return;
-      }
-      const { data: profileData, error: profileError } = await supabase
+      const { data } = await supabase.auth.getUser();
+      if (!data?.user) return setUser(null);
+
+      const { data: profileData } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', data.user.id)
         .single();
-      if (profileError || !profileData) {
-        setUser(null);
-        return;
-      }
-      setUser(profileData);
+
+      setUser(profileData ?? null);
     };
+
     fetchUser();
-  }, [supabase]);
-  if (!user) {
-    return null;
-  }
-  console.log('User data:', user);
+  }, []);
+
+  if (!user) return null;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

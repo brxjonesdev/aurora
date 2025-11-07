@@ -42,7 +42,7 @@ export default function Tree({
     return (
       <ContextWrapper
         name={item.name}
-        synopsis={item.hoverSynopsis}
+        synopsis={item.hover_synopsis}
         itemType={item.type}
         itemPath={itemPath}
         item={item}
@@ -73,7 +73,7 @@ export default function Tree({
   return (
     <ContextWrapper
       name={item.name}
-      synopsis={item.hoverSynopsis}
+      synopsis={item.hover_synopsis}
       itemType={item.type}
       itemPath={itemPath}
       item={item}

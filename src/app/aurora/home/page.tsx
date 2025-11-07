@@ -20,7 +20,6 @@ import StoryErrorView from './_components/error';
 
 export default async function Homepage() {
   const { storyService } = createServices();
-  let username = '';
   const supabase = await createClient();
   const { user, profile } = await getUserProfile({ supabase });
 
@@ -32,7 +31,7 @@ export default async function Homepage() {
     );
   }
 
-  username = profile.username || '';
+  const username = profile.username || '';
 
   const result = await storyService.getUsersStories(user.id);
   if (!result.ok) {

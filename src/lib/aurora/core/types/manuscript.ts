@@ -10,7 +10,7 @@ export type Status = {
   color: string;
 };
 
-export interface Manuscript {
+export interface ManuscriptMetadata {
   id: string;
   storyId: string;
   title: string;
@@ -23,10 +23,10 @@ export interface ManuscriptNodeBase {
   id: string;
   name: string;
   slug: string;
-  parentId: string | null;
+  parent_id: string | null;
   labels: Label[];
   status: Status | null;
-  hoverSynopsis?: string;
+  hover_synopsis?: string;
 }
 
 export interface ManuscriptDBNode extends ManuscriptNodeBase {

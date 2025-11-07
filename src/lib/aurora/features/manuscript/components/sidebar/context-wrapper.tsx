@@ -39,7 +39,6 @@ import {
 } from 'lucide-react';
 import { Input } from '@/lib/shared/components/ui/input';
 import LabelSelect from './label-select';
-import type { Folder, File } from '@/lib/aurora/core/types/manuscript';
 import StatusSelect from './status-select';
 
 let currentHoverSetter: React.Dispatch<React.SetStateAction<boolean>> | null = null;

@@ -24,7 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-inter antialiased`}>
-        <PlotweaverStoreProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -33,7 +32,6 @@ export default function RootLayout({
           >
             <SidebarProvider defaultOpen={true}>{children}</SidebarProvider>
           </ThemeProvider>
-        </PlotweaverStoreProvider>
       </body>
     </html>
   );

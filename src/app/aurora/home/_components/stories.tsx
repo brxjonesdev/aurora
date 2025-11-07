@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import React, { useEffect } from 'react';
 import StoryCard from './story-card';
 import { Story } from '@/lib/aurora/core/types/story';
-import { usePlotweaverStore } from '@/lib/aurora/core/stores/plotweaver-store-provider';
+import { useApricityStore } from '@/lib/aurora/core/stores/apricity-store';
+import { set } from 'date-fns';
 
 export default function Stories({
   initialStories,
@@ -12,16 +14,19 @@ export default function Stories({
   initialStories: Story[];
   username: string;
 }) {
-  const stories = usePlotweaverStore((state) => state.stories);
-  const setStories = usePlotweaverStore((state) => state.setStories);
+
+  const stories = useApricityStore((state) => state.stories)
+  const setStories = useApricityStore((state) => state.setStories)
 
   useEffect(() => {
-    if (initialStories.length > 0) {
-      setStories(initialStories);
-    }
-  }, [initialStories, setStories]);
+    setStories(initialStories);
+  }, [initialStories]);
 
-  const displayStories = stories.length > 0 ? stories : initialStories;
+  // Sort stories by updatedAt descending
+  const displayStories = [...stories].sort((a, b) => 
+    new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  );
+
 
   if (displayStories.length === 0) {
     return (
