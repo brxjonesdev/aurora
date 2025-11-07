@@ -1,53 +1,63 @@
-"use client"
+'use client';
 
-import { Card, CardContent } from "@/lib/shared/components/ui/card"
-import SynopsisCard from "./synopsis-card"
-import type { Folder, File} from "@/lib/aurora/core/types/manuscript"
+import { Card, CardContent } from '@/lib/shared/components/ui/card';
+import SynopsisCard from './synopsis-card';
+import type { Folder, File } from '@/lib/aurora/core/types/manuscript';
 
 export type SynopsisCardProps = {
-  id: string
-  title: string
-  synopsis: string
-}
+  id: string;
+  title: string;
+  synopsis: string;
+};
 
 // Recursive search function
 function findItemBySlug(items: (Folder | File)[], slug: string): Folder | File | undefined {
   for (const item of items) {
-    if (item.slug === slug) return item
-    if (item.type === "folder" && item.children) {
-      const found = findItemBySlug(item.children, slug)
-      if (found) return found
+    if (item.slug === slug) return item;
+    if (item.type === 'folder' && item.children) {
+      const found = findItemBySlug(item.children, slug);
+      if (found) return found;
     }
   }
-  return undefined
+  return undefined;
 }
 
-export default function Cards({
-  fileSlug,
-}: {
-  fileSlug: string
-}) {
+export default function Cards({ fileSlug }: { fileSlug: string }) {
   if (!fileSlug)
-    return <div className="text-muted-foreground flex h-64 items-center justify-center">Select a document</div>
-  
+    return (
+      <div className="text-muted-foreground flex h-64 items-center justify-center">
+        Select a document
+      </div>
+    );
+
   const manuscript = {
     content: [],
-  }
+  };
 
-  const file = findItemBySlug(manuscript.content, fileSlug)
+  const file = findItemBySlug(manuscript.content, fileSlug);
 
   if (!file) {
-    return <div className="text-muted-foreground flex h-64 items-center justify-center">File not found</div>
+    return (
+      <div className="text-muted-foreground flex h-64 items-center justify-center">
+        File not found
+      </div>
+    );
   }
 
-  if (file.type === "file") {
-    return <div className="text-muted-foreground flex h-64 items-center justify-center">This file has no sub-docs</div>
+  if (file.type === 'file') {
+    return (
+      <div className="text-muted-foreground flex h-64 items-center justify-center">
+        This file has no sub-docs
+      </div>
+    );
   }
 
   if (!file.children || file.children.length === 0) {
     return (
-      <div className="text-muted-foreground flex h-64 items-center justify-center">This folder has no sub-docs</div>
-    )
+      <div className="text-muted-foreground flex h-64 items-center justify-center">
+        This folder has no sub-docs
+      </div>
+    );
   }
 
   return (
@@ -60,10 +70,10 @@ export default function Cards({
             title={item.name}
             labels={item.labels}
             status={item.status}
-            synopsis={item.hoverSynopsis ?? ""}
+            synopsis={item.hoverSynopsis ?? ''}
           />
         ))}
       </CardContent>
     </Card>
-  )
+  );
 }

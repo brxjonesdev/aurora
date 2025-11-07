@@ -7,7 +7,9 @@ export default function StoryCard({ story, username }: { story: Story; username:
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/aurora/manuscript/${username}/${story.slug}?view=editor`);
+    if (story.manuscripts && story.manuscripts.length > 0) {
+      router.push(`/aurora/${username}/${story.manuscripts[0].id}/${story.manuscripts[0].root_folder_id}?view=editor`);
+    }
   };
 
   return (

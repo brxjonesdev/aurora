@@ -1,7 +1,6 @@
 import { ok, err, Result } from '@/lib/utils';
 import { IStoryRepository } from '../repositories/interfaces/IStoriesRepo';
-import { Story, StoryCreate, StoryUpdate } from '../types/story';
-import { get } from 'http';
+import { Story, StoryCreate, StoryCreateInput, StoryUpdate } from '../types/story';
 
 export function createStoryService(repository: IStoryRepository) {
   return {
@@ -11,10 +10,11 @@ export function createStoryService(repository: IStoryRepository) {
       return ok(result.data);
     },
 
-    async createStory(story: StoryCreate) {
+    async createStory(story: StoryCreateInput) {
       if (!story.title.trim()) return err('Title cannot be empty');
       if (!story.description.trim()) return err('Description cannot be empty');
       const newStory: StoryCreate = {
+        storyId: crypto.randomUUID(),
         ownerId: story.ownerId,
         title: story.title,
         description: story.description,

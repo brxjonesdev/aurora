@@ -15,11 +15,14 @@ import Stories from './_components/stories';
 import { getUserProfile } from '@/lib/aurora/features/auth-&-user/utils';
 import StoryErrorView from './_components/error';
 
+
+
+
 export default async function Homepage() {
   const { storyService } = createServices();
   let username = '';
   const supabase = await createClient();
-  const {user, profile} = await getUserProfile({supabase});
+  const { user, profile } = await getUserProfile({ supabase });
 
   if (!profile) {
     return (
@@ -33,13 +36,10 @@ export default async function Homepage() {
 
   const result = await storyService.getUsersStories(user.id);
   if (!result.ok) {
-    return (
-      <StoryErrorView errorMessage={result.error.message} />
-    );
+    return <StoryErrorView errorMessage={result.error.message} />;
   }
 
-  const userStories = result.data;
-
+  const userStories= result.data;
   return (
     <section className="flex w-full flex-1 gap-0 px-8 py-4">
       <Card className="flex-1 gap-0 border-2 bg-transparent p-0">
@@ -52,14 +52,6 @@ export default async function Homepage() {
         </CardHeader>
         <CardContent className="bg-secondary flex flex-1 flex-col gap-4 rounded-b-lg p-4 lg:flex-row">
           <Stories initialStories={userStories} username={username} />
-          {userStories.length === 0 && (
-            <section className="flex flex-1 flex-col items-center justify-center">
-              <h2>You have no stories yet.</h2>
-              <p className="text-muted-foreground">
-                Click &quot;Create New Story&quot; to get started!
-              </p>
-            </section>
-          )}
         </CardContent>
       </Card>
     </section>

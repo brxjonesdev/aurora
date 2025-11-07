@@ -13,6 +13,11 @@ export interface Story {
   createdAt: string;
   updatedAt: string;
   ownerId: string;
+  storyId: string;
+  manuscripts: {
+    id: string;
+    root_folder_id: string | null;
+  }[];
 }
 
 export const DEFAULT_STORY_SETTINGS: StorySettings = {
@@ -20,12 +25,15 @@ export const DEFAULT_STORY_SETTINGS: StorySettings = {
   defaultView: 'timeline',
 };
 
-export interface StoryCreate {
+export interface StoryCreateInput {
   title: string;
   description: string;
-  slug: string;
   ownerId: string;
-  settings?: Partial<StorySettings>;
+}
+
+export interface StoryCreate extends StoryCreateInput {
+  slug?: string;
+  storyId: string;
 }
 
 export interface StoryUpdate {

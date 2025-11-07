@@ -1,11 +1,19 @@
-import { AppSidebar } from '@/lib/aurora/features/navigation/sidebar/sidebar';
+import ManuscriptSidebar from '@/lib/aurora/features/navigation/sidebar/manuscript-sidebar';
 import { SidebarInset, SidebarTrigger } from '@/lib/shared/components/ui/sidebar';
 import React from 'react';
 
-export default function AuroraLayout({ children }: { children: React.ReactNode }) {
+export default async function AuroraLayout({ 
+  children, 
+  params 
+}: { 
+  children: React.ReactNode; 
+  params: Promise<{ username: string; manuscriptID: string; file: string }> 
+}) {
+  const { manuscriptID } = await params;
+  
   return (
     <>
-      <AppSidebar />
+      <ManuscriptSidebar manuscriptID={manuscriptID} />
       <SidebarInset>
         <main className="flex min-h-screen w-full flex-col">
           <div className="flex items-center gap-4 border-b p-4 md:hidden">

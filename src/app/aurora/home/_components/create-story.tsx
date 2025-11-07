@@ -24,7 +24,6 @@ interface CreateStoryDialogProps {
 }
 
 export default function CreateStory({ userId, username }: CreateStoryDialogProps) {
-  console.log('CreateStory rendered with userId:', userId, 'and username:', username);
   const { storyService } = useServices();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -42,18 +41,15 @@ export default function CreateStory({ userId, username }: CreateStoryDialogProps
       title,
       description,
       ownerId: userId,
-      slug: title
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w-]+/g, ''),
     });
     if (!result.ok) {
       setError(result.error);
+      console.log('Error creating story:', result.error);
       setIsSubmitting(false);
     } else {
       setIsSubmitting(false);
       setError(null);
-      router.push(`/aurora/${username}/${result.data.slug}/timeline`);
+      router.push(`/aurora/${username}/${result.data.manuscripts[0].id}/timeline`);
     }
   };
 

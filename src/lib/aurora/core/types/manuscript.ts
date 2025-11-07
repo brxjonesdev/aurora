@@ -10,34 +10,50 @@ export type Status = {
   color: string;
 };
 
-export type Folder = {
-  id: string;
-  type: 'folder';
-  labels?: Label[];
-  status?: Status;
-  slug: string;
-  name: string;
-  children: Array<Folder | File>;
-  hoverSynopsis?: string;
-};
-
-export type File = {
-  type: 'file';
-  name: string;
-  id: string;
-  slug: string;
-  labels?: Label[];
-  status?: Status;
-  hoverSynopsis?: string;
-};
-
 export interface Manuscript {
   id: string;
   storyId: string;
-  content: Array<Folder | File>;
+  title: string;
+  rootFolderId: string;
   createdAt: string;
   updatedAt: string;
-  totalWordCount?: number;
-  totalCharacterCount?: number;
-  // Add other relevant fields as needed
+}
+
+export interface ManuscriptNodeBase {
+  id: string;
+  name: string;
+  slug: string;
+  parentId: string | null;
+  labels: Label[];
+  status: Status | null;
+  hoverSynopsis?: string;
+}
+
+export interface ManuscriptDBNode extends ManuscriptNodeBase {
+  type: 'folder' | 'file';
+}
+
+export interface ManuscriptTreeNode extends ManuscriptNodeBase {
+  type: 'folder' | 'file';
+  children: ManuscriptTreeNode[];
+}
+
+export interface ManuscriptFolder extends ManuscriptTreeNode {
+  type: 'folder';
+}
+
+export interface ManuscriptFile extends ManuscriptTreeNode {
+  type: 'file';
+}
+
+export type ManuscriptWithTree = {
+  manuscript: Manuscript;
+  tree: ManuscriptTreeNode;
+}
+
+export type ManuscriptCreate = {
+  story_id: string;
+  title: string;
+  root_folder_id: string | null;
+
 }

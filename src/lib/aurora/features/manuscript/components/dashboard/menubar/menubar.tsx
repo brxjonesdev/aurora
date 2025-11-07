@@ -14,8 +14,6 @@ export default function ManuscriptMenubar({ fileName }: { fileName: string }) {
     router.replace(`?${params.toString()}`);
   };
 
-
-
   const formattedFileName = fileName
     ? fileName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
     : 'Untitled Document';

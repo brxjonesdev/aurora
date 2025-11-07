@@ -16,29 +16,30 @@ type SynopsisCardProps = {
 };
 export default function SynopsisCard({ id, title, synopsis, labels, status }: SynopsisCardProps) {
   return (
-    <Card className='text-xs flex flex-col h-full' key={id}>
+    <Card className="flex h-full flex-col text-xs" key={id}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
-      <CardContent className='flex-1 bg-blue-300/20'>
+      <CardContent className="flex-1 bg-blue-300/20">
         <p>{synopsis}</p>
       </CardContent>
       <CardFooter>
         <div>
-          {labels && labels.map((label) => (
-            <span
-              key={label.value}
-              className={`inline-block px-2 py-1 text-xs rounded-full mr-2`}
-              style={{ backgroundColor: label.color }}
-            >
-              {label.label}
-            </span>
-          ))}
+          {labels &&
+            labels.map((label) => (
+              <span
+                key={label.value}
+                className={`mr-2 inline-block rounded-full px-2 py-1 text-xs`}
+                style={{ backgroundColor: label.color }}
+              >
+                {label.label}
+              </span>
+            ))}
         </div>
         <div>
           {status && (
             <span
-              className={`inline-block px-2 py-1 text-xs rounded-full`}
+              className={`inline-block rounded-full px-2 py-1 text-xs`}
               style={{ backgroundColor: status.color }}
             >
               {status.label}

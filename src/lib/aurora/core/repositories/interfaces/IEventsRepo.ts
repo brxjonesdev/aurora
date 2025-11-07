@@ -1,5 +1,5 @@
 import { Result } from '@/lib/utils';
-import { EventCreate, Event, EventUpdate } from '@/lib/aurora/core/types/event';
+
 
 export interface IEventsRepository {
   create(event: EventCreate): Promise<Result<Event, string>>;

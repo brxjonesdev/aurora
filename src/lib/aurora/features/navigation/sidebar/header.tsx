@@ -18,29 +18,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function Header({ user, slug }: { user: string; slug: string }) {
-  const navItems = [
-    { href: `/aurora/manuscript/${user}/${slug}`, icon: Pen, label: 'Manuscript', disabled: false },
-    {
-      href: `/aurora/worldbuilding/${user}/${slug}`,
-      icon: Globe,
-      label: 'Worldbuilding',
-      disabled: true,
-    },
-    {
-      href: `/aurora/plotweaver/${user}/${slug}/timeline`,
-      icon: BookOpen,
-      label: 'Plotweaver',
-      disabled: false,
-    },
-    {
-      href: `/aurora/characters/${user}/${slug}`,
-      icon: Users,
-      label: 'Characters',
-      disabled: true,
-    },
-    { href: `/aurora/notes/${user}/${slug}`, icon: StickyNote, label: 'Notes', disabled: true },
-  ];
+export default function Header({ user }: { user: string; slug: string }) {
 
   return (
     <DropdownMenu>
