@@ -47,7 +47,7 @@ export interface ManuscriptFile extends ManuscriptTreeNode {
 }
 
 export type ManuscriptWithTree = {
-  manuscript: Manuscript;
+  manuscript: ManuscriptMetadata;
   tree: ManuscriptTreeNode;
 }
 

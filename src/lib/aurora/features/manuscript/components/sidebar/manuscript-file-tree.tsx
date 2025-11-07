@@ -19,15 +19,15 @@ import {
 import { PlusCircleIcon, PlusIcon } from 'lucide-react';
 import type { ManuscriptTreeNode } from '@/lib/aurora/core/types/manuscript';
 import { useParams, useRouter } from 'next/navigation';
+import useManuscriptSidebar from './useManuscriptSidebar';
 
 export default function ManuscriptFileTree({tree, manuscriptID} : {tree: ManuscriptTreeNode, manuscriptID: string}) {
 const params = useParams<{username: string, manuscriptID: string, fileID: string}>();
 const router = useRouter();
-const handleSelect = (slug: string, id: string) => {
+const {addNewFile, addNewFolder} = useManuscriptSidebar({manuscriptID});
+const handleSelect = (id: string) => {
   if (params.fileID === id) return;
-    // router.push(`/aurora/${params.username}/manuscripts/${manuscriptID}/files/${slug}`);
     router.push(`/aurora/${params.username}/${params.manuscriptID}/${id}`);
-    // navigate or set state here
   };
 
   return (
@@ -40,11 +40,11 @@ const handleSelect = (slug: string, id: string) => {
           </SidebarGroupAction>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="center" sideOffset={18}>
-          <DropdownMenuItem >
+          <DropdownMenuItem onClick={() => addNewFolder(null, "New Folder")}>
             <PlusIcon className="size-4" />
             <span>Add New Folder</span>
           </DropdownMenuItem>
-          <DropdownMenuItem >
+          <DropdownMenuItem onClick={() => addNewFile(null, "New File")}>
             <PlusIcon className="size-4" />
             <span>Add New File</span>
           </DropdownMenuItem>

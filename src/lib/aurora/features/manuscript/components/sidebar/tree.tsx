@@ -36,7 +36,7 @@ export default function Tree({
   onDuplicate?: (item: Folder | File, path: number[]) => void;
   allFolders?: Array<{ id: string; name: string }>;
   selectedId?: string | null;
-  onSelect?: (targetFileSlug: string, id: string, type: 'file' | 'folder') => void;
+  onSelect?: (fileID: string) => void;
 }) {
   if (item.type === 'file') {
     return (
@@ -53,7 +53,7 @@ export default function Tree({
       >
         <SidebarMenuItem
           className="cursor-pointer rounded"
-          onClick={() => onSelect?.(item.slug, item.id, item.type)}
+          onClick={() => onSelect?.(item.id)}
         >
           <SidebarMenuButton
             className={`rounded text-xs ${
@@ -96,7 +96,7 @@ export default function Tree({
                   ? 'bg-blue-300/30 hover:bg-blue-300/30'
                   : 'bg-transparent hover:bg-cyan-300/30'
               } focus-visible:ring-0 focus-visible:ring-offset-0`}
-              onClick={() => onSelect?.(item.slug, item.id, item.type)}
+              onClick={() => onSelect?.(item.id)}
             >
               <ChevronRight className="size-4 transition-transform" />
               <FolderIcon className="size-4" />
