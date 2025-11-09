@@ -17,11 +17,11 @@ import {
   DropdownMenuTrigger,
 } from '@/lib/shared/components/ui/dropdown-menu';
 import { createClient } from '@/lib/supabase/client';
-import type { Profile } from '@/lib/aurora/features/auth-&-user/profile.service';
 import { useEffect, useState } from 'react';
 import Avatar from 'boring-avatars';
-import LogoutButton from '@/lib/aurora/features/auth-&-user/logout-btn';
 import { Card } from '../ui/card';
+import { Profile } from '@/lib/apricity/core/features/auth-&-user/profile.service';
+import LogoutButton from '@/lib/apricity/core/features/auth-&-user/logout-btn';
 
 const supabase = createClient();
 

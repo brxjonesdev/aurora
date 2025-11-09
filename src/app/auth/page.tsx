@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import { LoginForm } from '@/lib/aurora/features/auth-&-user/login-form';
-import { SignupForm } from '@/lib/aurora/features/auth-&-user/sign-up-form';
 import { AnimatePresence, motion } from 'framer-motion';
+import { LoginForm } from '@/lib/apricity/core/features/auth-&-user/login-form';
+import { SignupForm } from '@/lib/apricity/core/features/auth-&-user/sign-up-form';
 
 export default function Auth() {
   const [mode, setMode] = React.useState<'login' | 'register'>('login');
