@@ -24,7 +24,22 @@ export default function createManuscriptService(repository: IManuscriptRepositor
   }
   
   return ok(nodes)
-}
-
+    },
+    async getManuscriptLabels(manuscriptID: string) {
+      // const result = await repository.getManuscriptLabels(manuscriptID);
+      // if (!result.ok) {
+      //   return err(result.error);
+      // }
+      // return ok(result.data);
+      return ok([]);
+    },
+    async getManuscriptStatuses(manuscriptID: string) {
+      // const result = await repository.getManuscriptStatuses(manuscriptID);
+      // if (!result.ok) {
+      //   return err(result.error);
+      // }
+      // return ok(result.data);
+      return ok([]);
+    },
   };
 }

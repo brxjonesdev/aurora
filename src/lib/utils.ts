@@ -13,3 +13,20 @@ export function ok<T>(data: T): Result<T, never> {
 export function err<E>(error: E) {
   return { ok: false, error } as const;
 }
+
+export async function optimistic<T>(
+  applyLocal: () => void,
+  rollback: () => void,
+  performRemote: () => Promise<{ ok: boolean; data?: T; error?: string }>
+): Promise<T | null> {
+  console.log("OPTIMISTIC ACTION", applyLocal);
+  applyLocal();
+  // const result = await performRemote();
+  // if (!result.ok) {
+  //   rollback();
+  //   return null;
+  // }
+  // return result.data ?? null;
+  // return blank until remote is ready
+  return null;
+}

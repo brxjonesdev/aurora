@@ -1,16 +1,16 @@
-import ManuscriptSidebar from '@/lib/aurora/features/navigation/sidebar/manuscript-sidebar';
+import ManuscriptSidebar from '@/lib/aurora/features/navigation/sidebar/manuscript-sidebar-loader';
 import { SidebarInset, SidebarTrigger } from '@/lib/shared/components/ui/sidebar';
 import React from 'react';
 
-export default async function AuroraLayout({ 
-  children, 
-  params 
-}: { 
-  children: React.ReactNode; 
-  params: Promise<{ username: string; manuscriptID: string; file: string }> 
+export default async function AuroraLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ username: string; manuscriptID: string; file: string }>;
 }) {
   const { manuscriptID } = await params;
-  
+
   return (
     <>
       <ManuscriptSidebar manuscriptID={manuscriptID} />

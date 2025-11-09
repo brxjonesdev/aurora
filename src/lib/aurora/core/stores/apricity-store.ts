@@ -8,6 +8,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 import { createStorySlice, StorySlice } from "./slices/story-slice";
 import { createManuscriptSlice, ManuscriptSlice } from "./slices/manuscript-slice";
 
+
 // 1) Build an overall Store type
 export type ApricityStore = StorySlice & ManuscriptSlice;
 

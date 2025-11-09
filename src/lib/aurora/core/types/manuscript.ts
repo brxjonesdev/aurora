@@ -1,15 +1,18 @@
-export type Label = {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type ManuscriptLabel = {
+  id: string;
   label: string;
   value: string;
   color: string;
 };
 
-export type Status = {
+export type ManuscriptStatus = {
+  id: string;
   label: string;
   value: string;
   color: string;
 };
-
+// Same as in Supabase
 export interface ManuscriptMetadata {
   id: string;
   storyId: string;
@@ -24,10 +27,18 @@ export interface ManuscriptNodeBase {
   name: string;
   slug: string;
   parent_id: string | null;
-  labels: Label[];
-  status: Status | null;
+  labels: ManuscriptLabel[];
+  status: ManuscriptStatus | null;
   hover_synopsis?: string;
 }
+
+export type JSONContent = {
+  type: string;
+  attrs?: Record<string, any>;
+  content?: JSONContent[];
+  marks?: { type: string; attrs?: Record<string, any> }[];
+};
+
 
 export interface ManuscriptDBNode extends ManuscriptNodeBase {
   type: 'folder' | 'file';
@@ -40,20 +51,11 @@ export interface ManuscriptTreeNode extends ManuscriptNodeBase {
 
 export interface ManuscriptFolder extends ManuscriptTreeNode {
   type: 'folder';
+  content: null;
 }
 
 export interface ManuscriptFile extends ManuscriptTreeNode {
   type: 'file';
+  content: JSONContent | null;
 }
 
-export type ManuscriptWithTree = {
-  manuscript: ManuscriptMetadata;
-  tree: ManuscriptTreeNode;
-}
-
-export type ManuscriptCreate = {
-  story_id: string;
-  title: string;
-  root_folder_id: string | null;
-
-}
