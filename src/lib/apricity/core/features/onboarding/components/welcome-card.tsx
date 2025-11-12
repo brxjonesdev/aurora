@@ -8,7 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/lib/shared/components/ui/card';
-import SignInButton from '@/lib/aurora/features/auth-&-user/sign-in-btn';
+import SignInButton from '../../auth-&-user/sign-in-btn';
+
 
 export default function WelcomeCard() {
   const isAuthed = false; // Replace with actual authentication check

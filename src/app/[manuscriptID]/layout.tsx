@@ -1,4 +1,5 @@
-import ManuscriptSidebar from '@/lib/apricity/core/features/navigation/sidebar/manuscript-sidebar-loader';
+
+import ManuscriptSidebarLoader from '@/lib/apricity/core/features/file-system/sidebar/manuscript-sidebar-loader';
 import { SidebarInset, SidebarTrigger } from '@/lib/shared/components/ui/sidebar';
 import React from 'react';
 
@@ -13,7 +14,7 @@ export default async function AuroraLayout({
 
   return (
     <>
-      <ManuscriptSidebar manuscriptID={manuscriptID} />
+      <ManuscriptSidebarLoader manuscriptID={manuscriptID} />
       <SidebarInset>
         <main className="flex min-h-screen w-full flex-col">
           <div className="flex items-center gap-4 border-b p-4 md:hidden">

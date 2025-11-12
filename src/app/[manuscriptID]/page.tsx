@@ -9,6 +9,11 @@ export default async function ManuscriptNoFile({ params }: {
   const supabase = await createClient();
   const { username } = await params;
   await checkAuthenticated({ supabase, username });
+
+  // const result = await manuscriptService.getManuscriptDetails(manuscriptID);
+  // if (!result.ok) {
+  //   redirect(`/aurora/${username}`);
+  // }
   return (
     <div>ManuscriptNoFile</div>
   )

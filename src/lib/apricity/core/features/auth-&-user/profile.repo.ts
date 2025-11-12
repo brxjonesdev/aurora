@@ -18,9 +18,6 @@ export interface ProfileRepo {
 export function createInMemoryProfileRepo(): ProfileRepo {
   const profiles = new Map<string, Profile>();
 
-  console.log('Profile repo initialized');
-  console.log('Reserved username: irene');
-  console.log('Reserved username: john');
 
   return {
     async findById(id: string): Promise<Profile | null> {

@@ -7,16 +7,14 @@ import {
   CardTitle,
 } from '@/lib/shared/components/ui/card';
 import React from 'react';
-import CreateStory from '@/app/apricity/home/_components/create-story';
 import { createClient } from '@/lib/supabase/server';
 import StoryErrorView from './_components/error';
 import { createServices } from '@/lib/apricity/core/services/createServices';
 import { getUserProfile } from '@/lib/apricity/core/features/auth-&-user/utils';
 import CreateProfile from '@/lib/apricity/core/features/onboarding/components/create-profile';
 import Stories from './_components/stories';
+import CreateStory from './_components/create-story';
 
-
-export const dynamic = 'force-dynamic';
 
 
 export default async function Homepage() {

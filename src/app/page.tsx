@@ -1,4 +1,4 @@
-import WelcomeCard from '@/lib/aurora/features/onboarding/components/welcome-card';
+import WelcomeCard from "@/lib/apricity/core/features/onboarding/components/welcome-card";
 
 export default function Home() {
   return (

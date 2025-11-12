@@ -19,8 +19,8 @@ import {
 } from '@/lib/shared/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
 import { ManuscriptDBNode } from '../../../types/manuscript';
-import { buildFileTree } from './utils';
 import { ManuscriptTreeNodeItem } from './components/manuscript-tree-node';
+import { useManuscriptFileSystem } from './useManuscriptFileSystem';
 
 export function ManuscriptSidebarFileTree({
   nodes,
@@ -29,8 +29,9 @@ export function ManuscriptSidebarFileTree({
   nodes: ManuscriptDBNode[];
   manuscriptID: string;
 }) {
+  const { fileTree, addNode, renameNode, deleteNode, duplicateNode } = useManuscriptFileSystem(manuscriptID, nodes);
 
-  const fileTrees = React.useMemo(() => buildFileTree(nodes), [nodes]);
+
 
   return (
     <Sidebar className="w-64">
@@ -52,8 +53,8 @@ export function ManuscriptSidebarFileTree({
             </SidebarGroupLabel>
 
              <CollapsibleContent>
-              {fileTrees.length > 0 ? (
-                fileTrees.map(root => (
+              {fileTree.length > 0 ? (
+                fileTree.map(root => (
                   <ManuscriptTreeNodeItem
                     key={root.id}
                     node={root}

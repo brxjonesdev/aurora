@@ -1,9 +1,8 @@
-import { checkAuthenticated } from '@/lib/apricity/core/features/auth-&-user/utils';
-import ManuscriptDashboard from '@/lib/apricity/core/features/manuscript/components/dashboard/manuscript-dashboard';
-import ManuscriptMenubar from '@/lib/apricity/core/features/manuscript/components/dashboard/menubar/menubar';
-import { createClient } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
-import React from 'react';
+import { checkAuthenticated } from "@/lib/apricity/core/features/auth-&-user/utils";
+import ApricityWorkspace from "@/lib/apricity/core/features/file-system/editor/workspace";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+
 
 export default async function ManuscriptPage({
   params,
@@ -27,9 +26,9 @@ export default async function ManuscriptPage({
 
 
   return (
-    <section className="flex flex-1 flex-col gap-2 p-4">
-      <ManuscriptMenubar fileName={file} />
-      <ManuscriptDashboard file={file} defaultView={view ?? 'cards'} />
-    </section>
+    <ApricityWorkspace 
+    // file={result.data}
+    // manuscriptID={manuscriptID}
+    />
   );
 }
