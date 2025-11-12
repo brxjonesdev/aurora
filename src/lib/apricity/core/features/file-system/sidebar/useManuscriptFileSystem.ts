@@ -1,41 +1,81 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
 import type { ManuscriptDBNode, ManuscriptTreeNode } from '../../../types/manuscript';
 import { buildFileTree } from './utils';
+import { useFileSystemStore } from '../../../stores/file-system-provider';
 
 export interface UseManuscriptFileSystemResult {
   fileTree: ManuscriptTreeNode[];
-  addNode: (parentID: string | null, name: string, type: 'file' | 'folder') => void;
+  loading: boolean;
+  error: string | null;
+  createNode: (parentID: string | null, name: string, type: 'file' | 'folder') => void;
   renameNode: (nodeID: string, newName: string) => void;
-  deleteNode: (nodeID: string) => void;
-  duplicateNode: (node: ManuscriptTreeNode) => void;
+  removeNode: (nodeID: string) => void;
+  cloneNode: (node: ManuscriptTreeNode) => void;
 }
 
 export const useManuscriptFileSystem = (
   manuscriptID: string,
-  nodes: ManuscriptDBNode[],
+  nodes: ManuscriptDBNode[] | null,
 ): UseManuscriptFileSystemResult => {
-  const fileTree = buildFileTree(nodes);
-
-  const addNode = (parentID: string | null, name: string, type: 'file' | 'folder') => {
-    // TODO: add new node to tree + DB
-  };
-
-  const renameNode = (nodeID: string, newName: string) => {
-    // TODO: rename node in tree + DB
-  };
-
-  const deleteNode = (nodeID: string) => {
-    // TODO: remove node from tree + DB
-  };
-
-  const duplicateNode = (node: ManuscriptTreeNode) => {
-    // TODO: clone node (and children if folder) + DB insert
-  };
-
-  return {
-    fileTree,
+  const {
+    tree,
+    setTree,
     addNode,
     renameNode,
     deleteNode,
     duplicateNode,
+  } = useFileSystemStore((state) => state);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fileTree = useMemo(() => {
+    if (!nodes) return [];
+    try {
+      return buildFileTree(nodes);
+    } catch (err) {
+      setError('Failed to build file tree.');
+      return [];
+    }
+  }, [nodes]);
+
+  useEffect(() => {
+    if (!nodes) {
+      setError('No manuscript data found.');
+      setLoading(false);
+      return;
+    }
+
+    // Simulate a short delay for smoother UX (optional)
+    const timeout = setTimeout(() => {
+      setTree(fileTree);
+      setLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [fileTree, nodes, setTree]);
+
+  const createNode = (parentID: string | null, name: string, type: 'file' | 'folder') => {
+    addNode(parentID, name, type);
+  };
+
+  const removeNode = (nodeID: string) => {
+    deleteNode(nodeID);
+  };
+
+  const cloneNode = (node: ManuscriptTreeNode) => {
+    duplicateNode(node);
+  };
+
+  return {
+    fileTree: tree,
+    loading,
+    error,
+    createNode,
+    renameNode,
+    removeNode,
+    cloneNode,
   };
 };

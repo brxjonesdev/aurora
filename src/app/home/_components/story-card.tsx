@@ -7,7 +7,7 @@ export default function StoryCard({ story}: { story: Story }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/apricity/${story.manuscripts[0].id}`);
+    router.push(`/project/${story.manuscripts[0].id}`);
   };
 
   return (

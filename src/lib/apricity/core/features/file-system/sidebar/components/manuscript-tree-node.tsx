@@ -5,6 +5,13 @@ import Link from "next/link"
 import { useState } from "react"
 import { ChevronRight, File, Folder, FolderOpen } from "lucide-react"
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/lib/shared/components/ui/sidebar"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/lib/shared/components/ui/context-menu"
 import { cn } from "@/lib/utils"
 
 export function ManuscriptTreeNodeItem({
@@ -22,53 +29,81 @@ export function ManuscriptTreeNodeItem({
 
   return (
     <SidebarMenuItem key={node.id}>
-      <SidebarMenuButton
-        asChild={isFile}
-        className={cn(
-          "flex items-center gap-2 truncate rounded-md transition-all duration-200",
-          "hover:bg-sidebar-accent",
-          isFile && "text-sidebar-foreground/80 hover:text-sidebar-foreground",
-        )}
-        style={{ paddingLeft: `${depth * 16 + 8}px` }}
-      >
-        {isFile ? (
-          <Link href={`/apricity/${manuscriptID}/${node.slug}`} className="flex items-center gap-2 w-full">
-            <File className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <span className="truncate text-sm">{node.name}</span>
-          </Link>
-        ) : (
-          <div className="flex items-center gap-2 w-full">
-            {/* Toggle expand when clicking the icon */}
-            {hasChildren && (
-              <button
-                type="button"
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="p-0.5 rounded hover:bg-sidebar-accent/50 transition"
-              >
-                <ChevronRight
-                  className={cn(
-                    "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
-                    isExpanded && "rotate-90",
-                  )}
-                />
-              </button>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
+          <SidebarMenuButton
+            asChild
+            className={cn(
+              "flex items-center gap-2 truncate rounded-md transition-all duration-200",
+              "hover:bg-sidebar-accent",
+              isFile && "text-sidebar-foreground/80 hover:text-sidebar-foreground",
             )}
+            style={{ paddingLeft: `${depth * 16 + 8}px` }}
+          >
+            {isFile ? (
+              <Link href={`/project/${manuscriptID}/${node.slug}`} className="flex items-center gap-2 w-full">
+                <File className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="truncate text-sm">{node.name}</span>
+              </Link>
+            ) : (
+              <div className="flex items-center gap-2 w-full">
+                {hasChildren && (
+                  <button
+                    type="button"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="p-0.5 rounded hover:bg-sidebar-accent/50 transition"
+                  >
+                    <ChevronRight
+                      className={cn(
+                        "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                        isExpanded && "rotate-90",
+                      )}
+                    />
+                  </button>
+                )}
 
-            {/* Folder opens the folder route */}
-            <Link
-              href={`/apricity/${manuscriptID}/${node.slug}`}
-              className="flex items-center gap-2 flex-1 overflow-hidden"
-            >
-              {isExpanded && hasChildren ? (
-                <FolderOpen className="h-4 w-4 shrink-0 text-cyan-400/50" />
-              ) : (
-                <Folder className="h-4 w-4 shrink-0 text-cyan-400/50" />
-              )}
-              <span className="truncate text-sm font-medium">{node.name}</span>
-            </Link>
-          </div>
-        )}
-      </SidebarMenuButton>
+                <Link
+                  href={`/project/${manuscriptID}/${node.slug}`}
+                  className="flex items-center gap-2 flex-1 overflow-hidden"
+                >
+                  {isExpanded && hasChildren ? (
+                    <FolderOpen className="h-4 w-4 shrink-0 text-cyan-400/50" />
+                  ) : (
+                    <Folder className="h-4 w-4 shrink-0 text-cyan-400/50" />
+                  )}
+                  <span className="truncate text-sm font-medium">{node.name}</span>
+                </Link>
+              </div>
+            )}
+          </SidebarMenuButton>
+        </ContextMenuTrigger>
+
+        <ContextMenuContent>
+          {isFile ? (
+            <>
+              <ContextMenuItem disabled>Open</ContextMenuItem>
+              <ContextMenuItem disabled>Rename</ContextMenuItem>
+              <ContextMenuItem disabled>Duplicate</ContextMenuItem>
+              <ContextMenuSeparator />
+              <ContextMenuItem disabled className="text-destructive">
+                Delete
+              </ContextMenuItem>
+            </>
+          ) : (
+            <>
+              <ContextMenuItem disabled>New File</ContextMenuItem>
+              <ContextMenuItem disabled>New Folder</ContextMenuItem>
+              <ContextMenuSeparator />
+              <ContextMenuItem disabled>Rename</ContextMenuItem>
+              <ContextMenuItem disabled>Duplicate</ContextMenuItem>
+              <ContextMenuSeparator />
+              <ContextMenuItem disabled className="text-destructive">
+                Delete
+              </ContextMenuItem>
+            </>
+          )}
+        </ContextMenuContent>
+      </ContextMenu>
 
       {hasChildren && isExpanded && (
         <SidebarMenu>
