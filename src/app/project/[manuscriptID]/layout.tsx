@@ -1,4 +1,3 @@
-
 import ManuscriptSidebarLoader from '@/lib/apricity/core/features/file-system/sidebar/manuscript-sidebar-loader';
 import { SidebarInset, SidebarTrigger } from '@/lib/shared/components/ui/sidebar';
 import React from 'react';

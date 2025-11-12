@@ -15,8 +15,6 @@ import CreateProfile from '@/lib/apricity/core/features/onboarding/components/cr
 import Stories from './_components/stories';
 import CreateStory from './_components/create-story';
 
-
-
 export default async function Homepage() {
   const { storyService } = createServices();
   const supabase = await createClient();
@@ -37,7 +35,7 @@ export default async function Homepage() {
     return <StoryErrorView errorMessage={result.error.message} />;
   }
 
-  const userStories= result.data;
+  const userStories = result.data;
   return (
     <section className="flex w-full flex-1 gap-0 px-8 py-4">
       <Card className="flex-1 gap-0 border-2 bg-transparent p-0">

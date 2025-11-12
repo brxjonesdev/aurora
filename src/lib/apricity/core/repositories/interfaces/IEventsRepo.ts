@@ -1,6 +1,5 @@
 import { Result } from '@/lib/utils';
 
-
 export interface IEventsRepository {
   create(event: EventCreate): Promise<Result<Event, string>>;
   getEventsByStory(storyId: string): Promise<Result<Event[], string>>;

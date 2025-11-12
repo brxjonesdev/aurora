@@ -19,7 +19,7 @@ export async function optimistic<T>(
   rollback: () => void,
   performRemote: () => Promise<{ ok: boolean; data?: T; error?: string }>
 ): Promise<T | null> {
-  console.log("OPTIMISTIC ACTION", applyLocal);
+  console.log('OPTIMISTIC ACTION', applyLocal);
   applyLocal();
   // const result = await performRemote();
   // if (!result.ok) {

@@ -4,7 +4,6 @@ import { createStoryService } from './StoryService';
 import { createSupabaseManuscriptRepository } from '../repositories/implementations/supabase/SupabaseManuscriptRepo';
 import createManuscriptService from './ManuscriptService';
 
-
 export function useServices() {
   return useMemo(() => {
     const storyRepo = createSupabaseStoryRepository();

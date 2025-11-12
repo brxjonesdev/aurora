@@ -1,6 +1,6 @@
 // lib/manuscript/build-tree.ts
 
-import { ManuscriptDBNode, ManuscriptTreeNode } from "@/lib/apricity/core/types/manuscript";
+import { ManuscriptDBNode, ManuscriptTreeNode } from '@/lib/apricity/core/types/manuscript';
 
 export function buildFileTree(nodes: ManuscriptDBNode[]): ManuscriptTreeNode[] {
   const lookup = new Map<string, ManuscriptTreeNode>();
@@ -9,7 +9,7 @@ export function buildFileTree(nodes: ManuscriptDBNode[]): ManuscriptTreeNode[] {
     lookup.set(node.id, {
       ...node,
       children: [],
-      content: node.type === "file" ? null : null,
+      content: node.type === 'file' ? null : null,
     });
   });
 

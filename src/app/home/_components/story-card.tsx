@@ -3,7 +3,7 @@ import { Story } from '@/lib/apricity/core/types/story';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/lib/shared/components/ui/card';
 import { useRouter } from 'next/navigation';
 
-export default function StoryCard({ story}: { story: Story }) {
+export default function StoryCard({ story }: { story: Story }) {
   const router = useRouter();
 
   const handleClick = () => {

@@ -22,11 +22,13 @@ import Avatar from 'boring-avatars';
 import { Card } from '../ui/card';
 import { Profile } from '@/lib/apricity/core/features/auth-&-user/profile.service';
 import LogoutButton from '@/lib/apricity/core/features/auth-&-user/logout-btn';
+import { Button } from '../ui/button';
 
 const supabase = createClient();
 
-export default function UserMenu() {
+export default function UserMenu({open}: {open?: boolean}) {
   const [user, setUser] = useState<Profile | null>(null);
+  const [isOpen, setIsOpen] = useState(open ?? false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,22 +49,20 @@ export default function UserMenu() {
 
   if (!user) return null;
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Card className="hover:bg-accent hover:text-accent-foreground flex min-h-[44px] w-full cursor-pointer flex-row items-center gap-2 p-2 transition-colors">
-          <div>
-            <Avatar
+       <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+          >
+                    <Avatar
               name={user.avatar_id as string}
               colors={['#e7ecef', '#274c77', '#6096ba', '#a3cef1', '#8b8c89']}
               variant="beam"
-              size={30}
-            />
-          </div>
-          <p className="hidden md:block">/</p>
-          <div className="hidden md:block">
-            <span className="text-foreground truncate text-sm font-medium">{user.full_name}</span>
-          </div>
-        </Card>
+              size={18}
+      />
+          </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-[calc(100vw-2rem)] max-w-64 md:w-64"

@@ -1,9 +1,10 @@
-
 import { checkAuthenticated } from '@/lib/apricity/core/features/auth-&-user/utils';
 import { createClient } from '@/lib/supabase/server';
-import React from 'react'
+import React from 'react';
 
-export default async function ManuscriptNoFile({ params }: {
+export default async function ManuscriptNoFile({
+  params,
+}: {
   params: Promise<{ username: string; manuscriptID: string }>;
 }) {
   const supabase = await createClient();
@@ -14,7 +15,5 @@ export default async function ManuscriptNoFile({ params }: {
   // if (!result.ok) {
   //   redirect(`/aurora/${username}`);
   // }
-  return (
-    <div>ManuscriptNoFile</div>
-  )
+  return <div>ManuscriptNoFile</div>;
 }

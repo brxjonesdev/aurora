@@ -3,7 +3,6 @@ import { ManuscriptSidebarFileTree } from './manuscript-sidebar';
 import { ManuscriptDBNode } from '../../../types/manuscript';
 import { createServices } from '../../../services/createServices';
 
-
 type Props = { manuscriptID: string };
 
 export default async function ManuscriptSidebarLoader({ manuscriptID }: Props) {
@@ -15,7 +14,6 @@ export default async function ManuscriptSidebarLoader({ manuscriptID }: Props) {
   }
 
   const nodes: ManuscriptDBNode[] = result.data;
-  
 
   return <ManuscriptSidebarFileTree nodes={nodes} manuscriptID={manuscriptID} />;
 }

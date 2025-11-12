@@ -10,7 +10,6 @@ import {
 } from '@/lib/shared/components/ui/card';
 import SignInButton from '../../auth-&-user/sign-in-btn';
 
-
 export default function WelcomeCard() {
   const isAuthed = false; // Replace with actual authentication check
   return (

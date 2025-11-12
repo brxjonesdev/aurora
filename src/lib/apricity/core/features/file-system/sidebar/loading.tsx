@@ -1,11 +1,19 @@
-import {Sidebar , SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarFooter } from "@/lib/shared/components/ui/sidebar";
-import { Skeleton } from "@/lib/shared/components/ui/skeleton";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarFooter,
+} from '@/lib/shared/components/ui/sidebar';
+import { Skeleton } from '@/lib/shared/components/ui/skeleton';
 
 export default function SidebarLoading() {
   return (
     <Sidebar className="w-64">
       <SidebarHeader>
-        <Skeleton className="h-6 w-24 mb-2" />
+        <Skeleton className="mb-2 h-6 w-24" />
         <Skeleton className="h-4 w-32" />
       </SidebarHeader>
 

@@ -5,18 +5,10 @@ import React from 'react';
 import StoryCard from './story-card';
 import { Story } from '@/lib/apricity/core/types/story';
 
-export default function Stories({
-  stories,
-  username,
-}: {
-  stories: Story[];
-  username: string;
-}) {
-
-  const displayStories = [...stories].sort((a, b) => 
-    new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+export default function Stories({ stories, username }: { stories: Story[]; username: string }) {
+  const displayStories = [...stories].sort(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
-
 
   if (displayStories.length === 0) {
     return (

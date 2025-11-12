@@ -1,8 +1,7 @@
-import { checkAuthenticated } from "@/lib/apricity/core/features/auth-&-user/utils";
-import ApricityWorkspace from "@/lib/apricity/core/features/file-system/editor/workspace";
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
-
+import { checkAuthenticated } from '@/lib/apricity/core/features/auth-&-user/utils';
+import ApricityWorkspace from '@/lib/apricity/core/features/file-system/editor/workspace';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 
 export default async function ManuscriptPage({
   params,
@@ -24,9 +23,8 @@ export default async function ManuscriptPage({
   //   redirect(`/aurora/${username}/${manuscriptID}`);
   // }/
 
-
   return (
-    <ApricityWorkspace 
+    <ApricityWorkspace
     // file={result.data}
     // manuscriptID={manuscriptID}
     />

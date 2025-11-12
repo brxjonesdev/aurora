@@ -27,8 +27,6 @@ export interface ManuscriptNodeBase {
   name: string;
   slug: string;
   parent_id: string | null;
-  labels: ManuscriptLabel[];
-  status: ManuscriptStatus | null;
   hover_synopsis?: string;
 }
 
@@ -39,7 +37,6 @@ export type JSONContent = {
   marks?: { type: string; attrs?: Record<string, any> }[];
 };
 
-
 export interface ManuscriptDBNode extends ManuscriptNodeBase {
   type: 'folder' | 'file';
 }
@@ -47,7 +44,6 @@ export interface ManuscriptDBNode extends ManuscriptNodeBase {
 export interface ManuscriptTreeNode extends ManuscriptNodeBase {
   type: 'folder' | 'file';
   children: ManuscriptTreeNode[];
-  content: JSONContent | null;
 }
 
 export interface ManuscriptFolder extends ManuscriptTreeNode {
@@ -59,4 +55,3 @@ export interface ManuscriptFile extends ManuscriptTreeNode {
   type: 'file';
   content: JSONContent | null;
 }
-
